@@ -1,0 +1,16 @@
+{% extends 'base.html' %}
+{% block title %}{{ title }}{% endblock %}
+{% block robots %}<meta name="robots" content="noindex, nofollow">{% endblock %}
+{% block content %}
+<h2>{{ title }}</h2>
+<form method="post" enctype="multipart/form-data">{% csrf_token %}{{ form.as_p }}<button type="submit">Save</button></form>
+{% if delete_url %}
+<form method="post" action="{{ delete_url }}">{% csrf_token %}
+<button type="submit" style="color: red;">Delete</button>
+</form>
+{% elif product %}
+<form method="post" action="{% url 'product_delete' pk=product.pk %}">{% csrf_token %}
+<button type="submit" style="color: red;">Delete</button>
+</form>
+{% endif %}
+{% endblock %}

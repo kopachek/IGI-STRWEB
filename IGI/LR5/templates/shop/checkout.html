@@ -1,25 +1,27 @@
 {% extends 'base.html' %}
-{% block title %}Checkout{% endblock %}
+{% block title %}Payment{% endblock %}
 {% block content %}
-<h2>Place order</h2>
+<h2>Payment</h2>
+<table border="1" cellpadding="4">
+<tr><th>Product</th><th>Quantity</th><th>Sum (BYN)</th></tr>
+{% for it in items %}
+<tr><td>{{ it.product.name }}</td><td>{{ it.quantity }}</td><td>{{ it.line_total }}</td></tr>
+{% endfor %}
+<tr><td colspan="2"><strong>Total</strong></td><td><strong>{{ total }} BYN</strong></td></tr>
+</table>
+<p>A promo code discount is applied when you confirm.</p>
+
+{% for e in errors %}<p style="color:red">{{ e }}</p>{% endfor %}
 <form method="post" novalidate>
   {% csrf_token %}
-  <p>
-    <label>Product
-      <select name="product_id" required>
-        {% for p in products %}<option value="{{ p.pk }}">{{ p.name }} — {{ p.price }} BYN</option>{% endfor %}
-      </select>
-    </label>
-  </p>
-  <p><label>Quantity <input type="number" name="quantity" min="1" max="100" value="1" required></label></p>
-  <p><label>Delivery date <input type="date" name="delivery_date" required></label></p>
+  <p><label>Pickup date <input type="date" name="pickup_date" min="{{ today|date:'Y-m-d' }}" value="{{ posted.pickup_date }}" required></label></p>
   <p><label>Pickup point
     <select name="pickup_point">
-      <option value="">—</option>
-      {% for pt in points %}<option value="{{ pt.pk }}">{{ pt.name }}</option>{% endfor %}
+      {% for pt in points %}<option value="{{ pt.pk }}" {% if posted.pickup_point == pt.pk|stringformat:'s' %}selected{% endif %}>{{ pt.name }}</option>{% endfor %}
     </select>
   </label></p>
-  <p><label>Promo code <input type="text" name="promo_code" maxlength="50"></label></p>
-  <button type="submit">Place order</button>
+  <p><label>Promo code <input type="text" name="promo_code" maxlength="50" value="{{ posted.promo_code }}"></label></p>
+  <button type="submit">Pay</button>
+  <a href="{% url 'cart' %}">Back to cart</a>
 </form>
 {% endblock %}

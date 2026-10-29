@@ -18,6 +18,9 @@ from dotenv import load_dotenv
 
 load_dotenv()
 
+os.environ.setdefault("AWS_REQUEST_CHECKSUM_CALCULATION", "when_required")
+os.environ.setdefault("AWS_RESPONSE_CHECKSUM_VALIDATION", "when_required")
+
 BASE_DIR = Path(__file__).resolve().parent.parent
 
 SECRET_KEY = os.environ.get('DJANGO_SECRET_KEY', 'django-insecure-dev-key-change-in-production')
@@ -103,10 +106,25 @@ USE_TZ = True
 
 STATIC_URL = '/static/'
 STATIC_ROOT = BASE_DIR / 'staticfiles'
-STATICFILES_STORAGE = 'whitenoise.storage.CompressedManifestStaticFilesStorage'
-
-MEDIA_URL = '/media/'
-MEDIA_ROOT = BASE_DIR / 'media'
+STORAGES = {
+    "default": {
+        "BACKEND": "storages.backends.s3.S3Storage",
+        "OPTIONS": {
+            "bucket_name": os.environ["AWS_STORAGE_BUCKET_NAME"],
+            "access_key": os.environ["AWS_ACCESS_KEY_ID"],
+            "secret_key": os.environ["AWS_SECRET_ACCESS_KEY"],
+            "endpoint_url": os.environ["AWS_ENDPOINT_URL_S3"],
+            "region_name": os.environ["AWS_REGION"],
+            "custom_domain": os.environ["AWS_S3_CUSTOM_DOMAIN"],
+            "addressing_style": "path",
+            "default_acl": None,
+            "querystring_auth": False,
+        },
+    },
+    "staticfiles": {
+        "BACKEND": "whitenoise.storage.CompressedManifestStaticFilesStorage",
+    },
+}
 
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 
@@ -161,3 +179,5 @@ CSRF_TRUSTED_ORIGINS = [
 
 if not DEBUG:
     SECURE_PROXY_SSL_HEADER = ('HTTP_X_FORWARDED_PROTO', 'https')
+
+SECURE_REFERRER_POLICY = 'strict-origin-when-cross-origin'

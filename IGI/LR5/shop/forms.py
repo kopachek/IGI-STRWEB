@@ -4,7 +4,7 @@ from django import forms
 from django.contrib.auth.forms import UserCreationForm
 from django.contrib.auth.models import User
 
-from shop.models import ClientProfile, Order, OrderItem, Product, Review
+from shop.models import (ClientProfile, Order, OrderItem, Product, Review, Article, CompanyInfo, ContactPerson, FAQEntry, ProductCategory, PromoCode, Review, Vacancy, PickupPoint)
 from shop.validators import validate_adult_age, validate_belarus_phone
 
 
@@ -29,7 +29,7 @@ class CustomerRegistrationForm(UserCreationForm):
     email = forms.EmailField(required=True)
     phone = forms.CharField(max_length=22, widget=BelarusPhoneWidget())
     birth_date = forms.DateField(
-        widget=forms.DateInput(attrs={'type': 'date', 'max': '2008-01-01'}),
+        widget=forms.DateInput(attrs={'type': 'date'}),
         help_text='Must be 18+',
     )
     first_name = forms.CharField(max_length=150, required=True)
@@ -91,24 +91,82 @@ class ProductFilterForm(forms.Form):
           ('-price', 'Price high-low'),
       ],
   )
-  category = forms.IntegerField(required=False)
+  category = forms.ModelChoiceField(
+        queryset=ProductCategory.objects.all(),
+        required=False,
+        empty_label='All categories',
+        label='Category',
+    )
 
 
 class CheckoutForm(forms.Form):
     product_id = forms.IntegerField()
     quantity = forms.IntegerField(min_value=1, max_value=100)
     pickup_point = forms.IntegerField(required=False)
-    delivery_date = forms.DateField(widget=forms.DateInput(attrs={'type': 'date', 'required': True}))
+    pickup_date = forms.DateField(widget=forms.DateInput(attrs={'type': 'date', 'required': True}))
     promo_code = forms.CharField(required=False, max_length=50)
 
 
 class OrderCRUDForm(forms.ModelForm):
     class Meta:
         model = Order
-        fields = ('client', 'employee', 'pickup_point', 'promo_code', 'delivery_date', 'delivery_cost', 'notes')
-
+        fields = ('client', 'employee', 'pickup_point', 'promo_code', 'pickup_date', 'notes')
 
 class ProductCRUDForm(forms.ModelForm):
     class Meta:
         model = Product
-        fields = ('name', 'price', 'unit', 'category', 'manufacturer', 'description', 'is_available')
+        fields = ('name', 'price', 'unit', 'category', 'manufacturer', 'description', 'is_available', 'image')
+
+class ArticleCRUDForm(forms.ModelForm):
+    class Meta:
+        model = Article
+        fields = ['title', 'summary', 'body', 'image', 'is_published']
+
+
+class FAQEntryCRUDForm(forms.ModelForm):
+    class Meta:
+        model = FAQEntry
+        fields = ['question', 'answer']
+
+
+class ContactPersonCRUDForm(forms.ModelForm):
+    class Meta:
+        model = ContactPerson
+        fields = ['full_name', 'role_description', 'phone', 'email', 'photo']
+
+
+class VacancyCRUDForm(forms.ModelForm):
+    class Meta:
+        model = Vacancy
+        fields = ['title', 'description', 'is_open']
+
+
+class ReviewCRUDForm(forms.ModelForm):
+    class Meta:
+        model = Review
+        fields = ['author_name', 'rating', 'text']
+
+class PromoCodeCRUDForm(forms.ModelForm):
+    class Meta:
+        model = PromoCode
+        fields = ['code', 'description', 'discount_percent', 'is_active', 'valid_from', 'valid_until']
+        widgets = {
+            'valid_from': forms.DateInput(attrs={'type': 'date'}),
+            'valid_until': forms.DateInput(attrs={'type': 'date'}),
+        }
+
+class CategoryCRUDForm(forms.ModelForm):
+    class Meta:
+        model = ProductCategory
+        fields = ['name', 'description', 'image']
+
+
+class CompanyInfoCRUDForm(forms.ModelForm):
+    class Meta:
+        model = CompanyInfo
+        fields = ['title', 'content', 'logo']
+
+class PickupPointCRUDForm(forms.ModelForm):
+    class Meta:
+        model = PickupPoint
+        fields = ['name', 'address', 'phone', 'working_hours']

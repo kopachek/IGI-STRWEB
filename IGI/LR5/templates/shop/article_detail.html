@@ -1,0 +1,40 @@
+{% extends 'base.html' %}
+{% load images %}
+
+{% block title %}{{ article.title }}{% endblock %}
+
+{% block meta_description %}<meta name="description" content="{{ article.summary }}">{% endblock %}
+{% block meta_keywords %}<meta name="keywords" content="{{ article.title }}, news, article, confectionery">{% endblock %}
+
+{% block content %}
+<article id="article-{{ article.pk }}" itemscope itemtype="https://schema.org/NewsArticle" itemid="{% url 'article_detail' pk=article.pk %}">
+	<header>
+		<h2 itemprop="headline">{{ article.title }}</h2>
+		<p>
+			Published on:
+			<time itemprop="datePublished" datetime="{{ article.published_at|date:'c' }}">
+				{{ article.published_at|date:"d/m/Y H:i" }}
+			</time>
+			<meta itemprop="dateModified" content="{{ article.updated_at|date:'c' }}">
+		</p>
+	</header>
+
+	{% if article.image %}
+	<figure>
+		<picture>
+			<source type="image/webp" srcset="{% srcset article.image %}" sizes="(max-width: 600px) 100vw, 500px">
+			<img itemprop="image" src="{{ article.image.url }}" alt="{{ article.title }}" width="500" style="max-width:100%; height:auto" loading="lazy">
+		</picture>
+		<figcaption>{{ article.title }}</figcaption>
+	</figure>
+	{% endif %}
+
+	<section class="article-body" itemprop="articleBody">
+		{{ article.body|linebreaks }}
+	</section>
+
+	<footer style="margin-top: 20px;">
+		<p><a href="{% url 'news' %}" accesskey="b" hreflang="en" type="text/html" rel="up" title="Back to the list of news">&larr; Back to News</a></p>
+	</footer>
+</article>
+{% endblock %}

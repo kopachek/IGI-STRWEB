@@ -1,10 +1,23 @@
 {% extends 'base.html' %}
 {% block title %}Vacancies{% endblock %}
+
+{% block meta_description %}<meta name="description" content="Open job vacancies at our confectionery shop.">{% endblock %}
+{% block meta_keywords %}<meta name="keywords" content="vacancies, jobs, careers, confectionery">{% endblock %}
+
 {% block content %}
 <h2>Vacancies</h2>
-<ul>
-{% for v in vacancies %}
-  <li><strong>{{ v.title }}</strong><p>{{ v.description|linebreaks }}</p></li>
-{% empty %}<li>No open vacancies.</li>{% endfor %}
-</ul>
+<section id="vacancies">
+	<ul>
+		{% for v in vacancies %}
+		<li id="vacancy-{{ v.pk }}" itemscope itemtype="https://schema.org/JobPosting" itemid="{% url 'vacancies' %}#vacancy-{{ v.pk }}">
+			<meta itemprop="datePosted" content="{{ v.created_at|date:'Y-m-d' }}">
+			<strong itemprop="title">{% if user.is_staff %}<a href="{% url 'vacancy_edit' pk=v.pk %}" title="Edit vacancy">{{ v.title }}</a>{% else %}{{ v.title }}{% endif %}</strong>
+			<div itemprop="description">{{ v.description|linebreaks }}</div>
+		</li>
+		{% empty %}<li>No open vacancies.</li>{% endfor %}
+	</ul>
+</section>
+{% if user.is_staff %}
+<p><a href="{% url 'vacancy_create' %}" accesskey="a" title="Add a new vacancy">Add vacancy</a></p>
+{% endif %}
 {% endblock %}

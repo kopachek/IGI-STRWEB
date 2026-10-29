@@ -1,13 +1,51 @@
 {% extends 'base.html' %}
 {% block title %}My orders{% endblock %}
+
+{% block meta_description %}<meta name="description" content="Your purchase history: orders, pickup points and totals.">{% endblock %}
+{% block meta_keywords %}<meta name="keywords" content="orders, purchase history, pickup, confectionery">{% endblock %}
+
 {% block content %}
+<style>
+	#orders > hr:last-of-type { display: none; }
+</style>
 <h2>Purchase history</h2>
-{% for o in orders %}
-{% if o.items_total == 0 %}
-{% else %}
-  <h3>Order #{{ o.pk }} — sale {% for k,v in dates.items %}{% if k == o.pk %}{{ v }}{% endif %}{% endfor %}</h3>
-  <p>Delivery: {{ o.delivery_date|date:"d/m/Y" }} | Total: {{ o.grand_total }} BYN</p>
-  <ul>{% for item in o.items.all %}<li>{{ item.product.name }} x{{ item.quantity }} = {{ item.line_total }}</li>{% endfor %}</ul>
-{% endif %}
-{% empty %}<p>No orders yet. <a href="{% url 'checkout' %}">Buy now</a></p>{% endfor %}
+<section id="orders">
+	{% for o in orders %}
+	{% if o.items_total == 0 %}
+	{% else %}
+	<article id="order-{{ o.pk }}" itemscope itemtype="https://schema.org/Order" itemid="{% url 'purchase_history' %}#order-{{ o.pk }}">
+		<meta itemprop="orderNumber" content="{{ o.pk }}">
+		<header>
+			<h3>Order #{{ o.pk }} — sale {% for k,v in dates.items %}{% if k == o.pk %}<span itemprop="orderDate">{{ v }}</span>{% endif %}{% endfor %}</h3>
+		</header>
+		<p>Pickup: <time datetime="{{ o.pickup_date|date:'Y-m-d' }}">{{ o.pickup_date|date:"d/m/Y" }}</time> at {{ o.pickup_point.address }} | Total: <strong><data value="{{ o.items_total }}">{{ o.items_total }}</data> <abbr title="Belarusian ruble">BYN</abbr></strong></p>
+		<table>
+			<caption>Items of order #{{ o.pk }}</caption>
+			<colgroup>
+				<col>
+				<col>
+				<col>
+			</colgroup>
+			<thead>
+				<tr>
+					<th id="h-product-{{ o.pk }}" scope="col">Product</th>
+					<th id="h-qty-{{ o.pk }}" scope="col">Quantity</th>
+					<th id="h-sum-{{ o.pk }}" scope="col">Sum (<abbr title="Belarusian ruble">BYN</abbr>)</th>
+				</tr>
+			</thead>
+			<tbody>
+				{% for item in o.items.all %}
+				<tr itemprop="orderedItem" itemscope itemtype="https://schema.org/OrderItem">
+					<td headers="h-product-{{ o.pk }}" itemprop="name">{{ item.product.name }}</td>
+					<td headers="h-qty-{{ o.pk }}"><data itemprop="orderQuantity" value="{{ item.quantity|floatformat:'-3' }}">x{{ item.quantity|floatformat:"-3" }}</data></td>
+					<td headers="h-sum-{{ o.pk }}">{{ item.line_total }}</td>
+				</tr>
+				{% endfor %}
+			</tbody>
+		</table>
+	</article>
+	<hr>
+	{% endif %}
+	{% empty %}<p>No orders yet. <a href="{% url 'checkout' %}" title="Go to payment">Buy now</a></p>{% endfor %}
+</section>
 {% endblock %}

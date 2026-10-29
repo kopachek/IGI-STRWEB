@@ -1,54 +1,77 @@
+{% load static %}
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="utf-8">
-  <title>{% block title %}Confectionery Shop{% endblock %}</title>
+	<meta charset="utf-8">
+	<base target="_self">
+	<meta http-equiv="X-UA-Compatible" content="IE=edge">
+	<meta name="viewport" content="width=device-width, initial-scale=1">
+    {% block meta_description %}<meta name="description" content="Confectionery Shop web application">{% endblock %}
+	{% block meta_keywords %}<meta name="keywords" content="confectionery, cakes, sweets, buy cake, candies, order sweets">{% endblock %}
+	<meta name="author" content="kopachek">
+	{% block robots %}<meta name="robots" content="index, follow">{% endblock %}
+	<title>{% block title %}Confectionery Shop{% endblock %}</title>
+	<link rel="icon" type="image/x-icon" href="{% static 'img/favicon.ico' %}">
+	<style>
+		table { border-collapse: collapse; margin: 1em 0; }
+		caption { font-weight: bold; text-align: left; padding: 4px 0; }
+		th, td { border: 1px solid #999; padding: 6px 10px; text-align: left; }
+		thead th, tfoot td { background: #f2f2f2; }
+		tbody th { background: #fafafa; }
+	</style>
 </head>
 <body>
-  <header class="bg-body-tertiary">
-    <h1><a href="{% url 'home' %}">Confectionery Shop</a></h1>
-    <nav>
-      <a href="{% url 'home' %}">Home</a> |
-      <a href="{% url 'about' %}">About</a> |
-      <a href="{% url 'news' %}">News</a> |
-      <a href="{% url 'faq' %}">FAQ</a> |
-      <a href="{% url 'contacts' %}">Contacts</a> |
-      <a href="{% url 'vacancies' %}">Vacancies</a> |
-      <a href="{% url 'reviews' %}">Reviews</a> |
-      <a href="{% url 'promos' %}">Promos</a> |
-      <a href="{% url 'categories' %}">Categories</a> |
-      <a href="{% url 'product_list' %}">Products</a> |
-      <a href="{% url 'privacy' %}">Privacy</a>
-      {% if user.is_authenticated %}
-        {% if user.client_profile %}
-        | <a href="{% url 'purchase_history' %}">My orders</a>
-        | <a href="{% url 'checkout' %}">Buy</a>
-        | <a href="{% url 'pickup_points' %}">Pickup</a>
-        | <a href="{% url 'my_promos' %}">My promos</a>
-        {% elif user.employee_profile %}
-        | <a href="{% url 'employee_dashboard' %}">Employee</a>
-        | <a href="{% url 'statistics' %}">Statistics</a>
-        {% endif %}
-        | <a href="{% url 'logout' %}">Logout ({{ user.username }})</a>
-      {% else %}
-        | <a href="{% url 'login' %}">Login</a>
-        | <a href="{% url 'register' %}">Register</a>
-      {% endif %}
-    </nav>
-    <p>
-      Server: {{ server_datetime }} | |
-      TZ server: {{ server_tz }}
-    </p>
-    {% if fx_rate %}<p>FX: 1 BYN ≈ {{ fx_rate }} USD</p>{% endif %}
-  </header>
-  <main>
-    {% if messages %}
-      <ul>{% for m in messages %}<li>{{ m }}</li>{% endfor %}</ul>
-    {% endif %}
-    {% block content %}{% endblock %}
-  </main>
-  <footer>
-    <pre>{{ text_calendar }}</pre>
-  </footer>
+	<header class="bg-body-tertiary" itemscope itemtype="https://schema.org/WebSite" itemid="{{ request.scheme }}://{{ request.get_host }}/">
+		<h1 tabindex="0" translate="no" itemprop="name"><a href="{% url 'home' %}" itemprop="url" accesskey="h" hreflang="en" type="text/html" title="Home page">Confectionery Shop</a></h1>
+		<nav>
+			<a href="{% url 'home' %}" accesskey="1" tabindex="1">Home</a> |
+			<a href="{% url 'about' %}" accesskey="2" tabindex="2">About</a> |
+			<a href="{% url 'news' %}" accesskey="3" tabindex="3">News</a> |
+			<a href="{% url 'faq' %}" accesskey="4" tabindex="4">FAQ</a> |
+			<a href="{% url 'contacts' %}" accesskey="5" tabindex="5">Contacts</a> |
+			<a href="{% url 'vacancies' %}" accesskey="6" tabindex="6">Vacancies</a> |
+			<a href="{% url 'reviews' %}" accesskey="7" tabindex="7">Reviews</a> |
+			<a href="{% url 'promos' %}" accesskey="8" tabindex="8">Promos</a> |
+			<a href="{% url 'categories' %}" accesskey="9" tabindex="9">Categories</a> |
+			<a href="{% url 'product_list' %}" accesskey="p" tabindex="10">Products</a> |
+			<a href="{% url 'privacy' %}" tabindex="11">Privacy</a>
+			{% if user.is_authenticated %}
+				| <a href="{% url 'pickup_points' %}" tabindex="12">Pickup</a>
+				{% if user.client_profile %}
+				| <a href="{% url 'purchase_history' %}" tabindex="13">My orders</a>
+				| <a href="{% url 'cart' %}" tabindex="14">Cart</a>
+				{% elif user.employee_profile %}
+				| <a href="{% url 'employee_dashboard' %}" tabindex="13">Employee</a>
+				| <a href="{% url 'statistics' %}" tabindex="14">Statistics</a>
+				{% endif %}
+				| <a href="{% url 'logout' %}" tabindex="15">Logout (<span translate="no">{{ user.username }}</span>)</a>
+			{% else %}
+				| <a href="{% url 'login' %}" tabindex="12">Login</a>
+				| <a href="{% url 'register' %}" tabindex="13">Register</a>
+			{% endif %}
+		</nav>
+		<aside>
+			<p>
+				Server: <time datetime="{{ server_datetime|date:'c' }}">{{ server_datetime }}</time> |
+				<abbr title="Time zone">TZ</abbr> server: <span translate="no">{{ server_tz }}</span>
+			</p>
+			{% if fx_rate %}<p><abbr title="Exchange rate">FX</abbr>: 1 <abbr title="Belarusian ruble">BYN</abbr> ≈ <data value="{{ fx_rate }}">{{ fx_rate }}</data> <abbr title="United States dollar">USD</abbr></p>{% endif %}
+		</aside>
+	</header>
+	<hr>
+	<main id="main-content" tabindex="-1">
+		{% if messages %}
+		<ul>
+			{% for m in messages %}
+			<li>{{ m }}</li>
+			{% endfor %}
+		</ul>
+		{% endif %}
+		{% block content %}{% endblock %}
+	</main>
+	<hr>
+	<footer>
+		<pre><code class="calendar-text">{{ text_calendar }}</code></pre>
+	</footer>
 </body>
 </html>

@@ -1,0 +1,76 @@
+{% extends 'base.html' %}
+{% load static images %}
+
+{% block title %}About Us - Confectionery Shop{% endblock %}
+
+{% block meta_description %}<meta name="description" content="Learn more about our confectionery shop, our history, company information, and certificates.">{% endblock %}
+{% block meta_keywords %}<meta name="keywords" content="about us, company history, confectionery certificates, company info">{% endblock %}
+
+{% block content %}
+<h2>About company</h2>
+
+{% if info %}
+	{% if info.logo %}
+	<p>
+		<img id="company-logo" itemprop="logo" src="{{ info.logo.url }}" alt="{{ info.title|default:'Company Logo' }}" height="100">
+	</p>
+	{% endif %}
+	<article>{{ info.content|linebreaks }}</article>
+{% else %}
+	<p>Information will appear soon.</p>
+{% endif %}
+
+<section id="video" style="margin-top: 30px;">
+	<h3>Company Video Presentation</h3>
+	<p>Watch a short video about how we create our sweets:</p>
+	<figure style="margin:0">
+		<iframe width="560" height="315"
+			src="https://www.youtube.com/embed/VIDEO_ID"
+			title="Company video presentation"
+			loading="lazy"
+			referrerpolicy="strict-origin-when-cross-origin"
+			allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
+			allowfullscreen></iframe>
+		<figcaption>Presentation on YouTube</figcaption>
+	</figure>
+	<video width="560" height="315" controls>
+		<source src="{% static 'vid/presentation.mp4' %}" type="video/mp4">
+		<span lang="ru">Your browser doesn't support video.</span>
+	</video>
+</section>
+
+{% if history %}
+<section id="history" style="margin-top: 30px;">
+	<h3>History</h3>
+	<ol>
+		{% for h in history %}
+		<li><strong><time datetime="{{ h.year }}">{{ h.year }}</time></strong>: {{ h.description }}</li>
+		{% endfor %}
+	</ol>
+</section>
+{% endif %}
+
+<section id="requisites" style="margin-top: 30px;" itemscope itemtype="https://schema.org/Organization" itemid="{% url 'about' %}#company" itemref="company-logo">
+	<h3>Company Requisites</h3>
+	<address>
+		<dl>
+			<dt>Name:</dt>
+			<dd><span itemprop="name">Confectionery Shop <abbr title="Limited Liability Company">LLC</abbr></span></dd>
+			<dt>Address:</dt>
+			<dd itemprop="address" itemscope itemtype="https://schema.org/PostalAddress">
+				<span itemprop="streetAddress">Independence Avenue 15</span>,
+				<span itemprop="addressLocality">Minsk</span>,
+				<span itemprop="addressCountry">Belarus</span>
+			</dd>
+		</dl>
+	</address>
+</section>
+
+<section id="certificate">
+	<h3>Certificate</h3>
+	<figure style="margin:0">
+		<img src="{% static 'img/certificate.jpeg' %}" alt="Certificate" style="max-width: 400px; width: 100%; height: auto; border: 1px solid #ccc;">
+		<figcaption>Certificate of inclusion in the Unified Register of Confectionery Manufacturers</figcaption>
+	</figure>
+</section>
+{% endblock %}

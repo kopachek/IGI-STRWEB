@@ -1,0 +1,73 @@
+{% extends 'base.html' %}
+{% load images %}
+
+{% block title %}Home - Confectionery Shop{% endblock %}
+
+{% block meta_description %}<meta name="description" content="Welcome to our confectionery shop. Fresh cakes, sweets, and pastries.">{% endblock %}
+{% block meta_keywords %}<meta name="keywords" content="confectionery, sweets, cakes, pastry shop">{% endblock %}
+
+{% block content %}
+<h2>Welcome</h2>
+
+{% if banners %}
+{% with b=banners.0 %}
+<figure id="banner" style="max-width:800px; margin:0">
+	<a href="{{ b.link|default:'#' }}" title="{{ b.title|default:'Advertisement' }}">
+		<picture>
+			<source type="image/webp" srcset="{% srcset b.image %}" sizes="(max-width: 800px) 100vw, 800px">
+			<img src="{{ b.image.url }}" alt="{{ b.title }}" style="width:100%">
+		</picture>
+	</a>
+</figure>
+{% endwith %}
+{% endif %}
+
+<section id="catalog">
+	<h3>Catalog</h3>
+	<nav>
+		<a href="{% url 'product_list' %}" accesskey="c" title="All products">Browse all products</a> |
+		<a href="{% url 'categories' %}" title="Product categories">Product categories</a>
+	</nav>
+</section>
+
+<section id="latest-news">
+	{% if latest_article %}
+	<article itemscope itemtype="https://schema.org/NewsArticle">
+		<h3>Latest news</h3>
+		{% if latest_article.image %}
+		<figure style="margin:0">
+			<a href="{% url 'news' %}">
+				<picture>
+					<source type="image/webp" srcset="{% srcset latest_article.image %}" sizes="(max-width: 600px) 100vw, 400px">
+					<img itemprop="image" src="{{ latest_article.image.url }}"
+						alt="{{ latest_article.title }}" style="max-width:100%; height:auto" width="400">
+				</picture>
+			</a>
+		</figure>
+		{% endif %}
+		<p><strong itemprop="headline">{{ latest_article.title }}</strong> — <span itemprop="description">{{ latest_article.summary }}</span></p>
+		<p>Published: <time itemprop="datePublished" datetime="{{ latest_article.published_at|date:'c' }}">{{ latest_article.published_at|date:"d/m/Y" }}</time></p>
+		<p><a href="{% url 'news' %}">All news</a></p>
+	</article>
+	{% else %}
+	<h3>Latest news</h3>
+	<p>No articles yet.</p>
+	{% endif %}
+</section>
+
+{% if partners %}
+<section id="partners">
+	<h3>Our partners</h3>
+	<ul style="display:flex; flex-wrap:wrap; gap:24px; align-items:center; list-style:none; padding:0">
+		{% for m in partners %}
+		<li itemscope itemtype="https://schema.org/Organization">
+			<meta itemprop="name" content="{{ m.name }}">
+			{% if m.website %}<a itemprop="url" href="{{ m.website }}" target="_blank" rel="noopener noreferrer" title="{{ m.name }} website">{% endif %}
+				{% if m.logo %}<img itemprop="logo" src="{{ m.logo.url }}" srcset="{% srcset m.logo %}" sizes="100px" alt="{{ m.name }}" height="50" loading="lazy">{% else %}<span translate="no">{{ m.name }}</span>{% endif %}
+			{% if m.website %}</a>{% endif %}
+		</li>
+		{% endfor %}
+	</ul>
+</section>
+{% endif %}
+{% endblock %}

@@ -1,11 +1,46 @@
 {% extends 'base.html' %}
 {% block title %}Reviews{% endblock %}
+
+{% block meta_description %}<meta name="description" content="Customer reviews of our confectionery shop.">{% endblock %}
+{% block meta_keywords %}<meta name="keywords" content="reviews, feedback, ratings, confectionery">{% endblock %}
+
 {% block content %}
+<style>
+	.review-list { list-style: none; padding: 0; max-width: 700px; }
+	.review-card { border: 1px solid #ddd; border-radius: 8px; padding: 12px 16px; margin-bottom: 14px; background: #fafafa; }
+	.review-card header { display: flex; justify-content: space-between; align-items: baseline; flex-wrap: wrap; gap: 8px; }
+	.review-card .stars { color: #e0a100; letter-spacing: 2px; white-space: nowrap; }
+	.review-card .score { color: #555; font-size: .9em; margin-left: 6px; }
+	.review-card blockquote { margin: 10px 0 6px; padding-left: 12px; border-left: 3px solid #ddd; }
+	.review-card footer { font-size: .85em; color: #666; }
+</style>
+
 <h2>Reviews</h2>
-<p><a href="{% url 'review_add' %}">Add review</a> (login required)</p>
-<ul>
-{% for r in reviews %}
-  <li>{{ r.author_name }} — {{ r.rating }}/5 — {{ r.review_date|date:"d/m/Y" }}<br>{{ r.text }}</li>
-{% empty %}<li>No reviews yet.</li>{% endfor %}
-</ul>
+<p><a href="{% url 'review_add' %}" accesskey="a" title="Add a new review">Add review</a> (login required)</p>
+
+<section id="reviews">
+	<ul class="review-list">
+		{% for r in reviews %}
+		<li class="review-card" id="review-{{ r.pk }}" itemscope itemtype="https://schema.org/Review" itemid="{% url 'reviews' %}#review-{{ r.pk }}">
+			<header>
+				<strong itemprop="author" itemscope itemtype="https://schema.org/Person"><span itemprop="name">{{ r.author_name }}</span></strong>
+				<span itemprop="reviewRating" itemscope itemtype="https://schema.org/Rating" title="Rating: {{ r.rating }} out of 5">
+					<meta itemprop="bestRating" content="5">
+					<meta itemprop="ratingValue" content="{{ r.rating }}">
+					<span class="stars" aria-hidden="true">{% for i in "12345" %}{% if forloop.counter <= r.rating %}★{% else %}☆{% endif %}{% endfor %}</span>
+					<span class="score">{{ r.rating }}/5</span>
+				</span>
+			</header>
+			<blockquote itemprop="reviewBody">{{ r.text|linebreaksbr }}</blockquote>
+			<footer>
+				<time itemprop="datePublished" datetime="{{ r.review_date|date:'Y-m-d' }}">{{ r.review_date|date:"d/m/Y" }}</time>
+				{% if user.is_staff %}
+				| <a href="{% url 'review_edit' pk=r.pk %}" title="Edit review">Edit</a>
+				| <a href="{% url 'review_delete' pk=r.pk %}" title="Delete review">Delete</a>
+				{% endif %}
+			</footer>
+		</li>
+		{% empty %}<li>No reviews yet.</li>{% endfor %}
+	</ul>
+</section>
 {% endblock %}

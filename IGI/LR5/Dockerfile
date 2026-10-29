@@ -4,8 +4,6 @@ ENV PYTHONDONTWRITEBYTECODE=1
 ENV PYTHONUNBUFFERED=1
 ENV DEBIAN_FRONTEND=noninteractive
 ENV PORT=8000
-ENV DJANGO_SUPERUSER_USERNAME=admin
-ENV DJANGO_SUPERUSER_PASSWORD=admin123
 
 WORKDIR /app
 
@@ -21,7 +19,7 @@ RUN pip install --upgrade pip && \
 COPY . .
 
 RUN adduser --disabled-password --gecos "" appuser && \
-    mkdir -p /app/logs /app/media /app/staticfiles && \
+    mkdir -p /app/log /app/staticfiles && \
     chown -R appuser:appuser /app
 
 USER appuser

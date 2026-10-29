@@ -1,15 +1,52 @@
 {% extends 'base.html' %}
 {% block title %}Statistics{% endblock %}
+
+{% block meta_description %}<meta name="description" content="Sales statistics of the confectionery shop: totals, averages, popular categories, clients and products.">{% endblock %}
+{% block meta_keywords %}<meta name="keywords" content="statistics, sales, categories, clients, products, confectionery">{% endblock %}
+
 {% block content %}
 <h2>Statistics</h2>
-<p>Total sales: <strong>{{ stats.total_sales }}</strong> BYN</p>
-<p>Sales mean / median / mode: {{ stats.sales_mean }} / {{ stats.sales_median }} / {{ stats.sales_mode }}</p>
-<p>Client age mean / median: {{ stats.age_mean }} / {{ stats.age_median }}</p>
-<p>Most popular category: <strong>{{ stats.popular_category }}</strong></p>
-<p>Highest profit category: <strong>{{ stats.top_profit_category }}</strong></p>
-<h3>Clients (A-Z)</h3>
-<ul>{% for c in stats.clients_alpha %}<li>{{ c }}</li>{% endfor %}</ul>
-<h3>Products (A-Z)</h3>
-<ul>{% for p in stats.products_alpha %}<li>{{ p.name }} — {{ p.price }}</li>{% endfor %}</ul>
-{% if chart_category %}<h3>Chart: categories</h3><img src="data:image/png;base64,{{ chart_category }}" alt="Category chart">{% endif %}
+
+<section id="summary" itemscope itemtype="https://schema.org/Report">
+	<meta itemprop="name" content="Sales statistics">
+	<dl>
+		<dt>Total sales</dt>
+		<dd><strong><data value="{{ stats.total_sales }}">{{ stats.total_sales }}</data></strong> <abbr title="Belarusian ruble">BYN</abbr></dd>
+
+		<dt>Sales mean / median / mode</dt>
+		<dd>{{ stats.sales_mean }} / {{ stats.sales_median }} / {{ stats.sales_mode }}</dd>
+
+		<dt>Client age mean / median</dt>
+		<dd>{{ stats.age_mean }} / {{ stats.age_median }}</dd>
+
+		<dt>Most popular category</dt>
+		<dd><strong>{{ stats.popular_category }}</strong></dd>
+
+		<dt>Highest profit category</dt>
+		<dd><strong>{{ stats.top_profit_category }}</strong></dd>
+	</dl>
+</section>
+
+<section id="clients">
+	<h3>Clients</h3>
+	<ol>
+		{% for c in stats.clients_alpha %}<li>{{ c }}</li>{% endfor %}
+	</ol>
+</section>
+
+<section id="products">
+	<h3>Products</h3>
+	<ol>
+		{% for p in stats.products_alpha %}<li><span itemprop="name">{{ p.name }}</span> — <data value="{{ p.price }}">{{ p.price }}</data></li>{% endfor %}
+	</ol>
+</section>
+
+{% if chart_category %}
+<section id="chart">
+	<h3>Chart: categories</h3>
+	<figure>
+		<img src="data:image/png;base64,{{ chart_category }}" alt="Category chart" style="max-width:100%; height:auto">
+	</figure>
+</section>
+{% endif %}
 {% endblock %}

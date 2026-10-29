@@ -1,11 +1,44 @@
 {% extends 'base.html' %}
+
 {% block title %}FAQ{% endblock %}
+
+{% block meta_description %}<meta name="description" content="Frequently asked questions and glossary of confectionery terms.">{% endblock %}
+{% block meta_keywords %}<meta name="keywords" content="FAQ, glossary, questions, answers, confectionery">{% endblock %}
+
 {% block content %}
-<h2>FAQ / Glossary</h2>
-<dl>
-{% for e in entries %}
-  <dt>{{ e.question }}</dt>
-  <dd>{{ e.answer }} <small>(added {% for k,v in dates_local.items %}{% if k == e.pk %}{{ v }}{% endif %}{% endfor %} UTC/local in header)</small></dd>
-{% empty %}<p>No entries.</p>{% endfor %}
-</dl>
+<h2>FAQ</h2>
+
+{% if user.is_staff %}
+<p><a href="{% url 'faq_create' %}" accesskey="a" title="Add a new FAQ entry">Add FAQ entry</a></p>
+{% endif %}
+
+<section id="faq" class="faq-container" itemscope itemtype="https://schema.org/FAQPage">
+	{% for e in entries %}
+	<article id="faq-{{ e.pk }}" itemscope itemprop="mainEntity" itemtype="https://schema.org/Question" itemid="{% url 'faq' %}#faq-{{ e.pk }}">
+		<details style="margin-bottom: 15px; border-bottom: 1px solid #eee; padding-bottom: 10px;">
+			<summary style="cursor: pointer; font-weight: bold; font-size: 1.1em;" itemprop="name">
+				{% if user.is_staff %}
+				<a href="{% url 'faq_edit' pk=e.pk %}" title="Edit entry">{{ e.question }}</a>
+				{% else %}
+				{{ e.question }}
+				{% endif %}
+			</summary>
+			<div style="margin-top: 10px; padding-left: 15px;" itemscope itemprop="acceptedAnswer" itemtype="https://schema.org/Answer">
+				<div itemprop="text">{{ e.answer|linebreaks }}</div>
+				<p>
+					<small>
+						Added:
+						<time itemprop="dateCreated" datetime="{{ e.published_at|date:'c' }}">
+							{{ e.published_at|date:"d/m/Y H:i" }}
+						</time>
+					</small>
+				</p>
+			</div>
+		</details>
+	</article>
+	{% empty %}
+	<p>No entries.</p>
+	{% endfor %}
+</section>
+
 {% endblock %}

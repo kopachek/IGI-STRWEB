@@ -12,7 +12,7 @@ def employee_required(view_func):
     @login_required
     @wraps(view_func)
     def _wrapped(request, *args, **kwargs):
-        if not hasattr(request.user, 'employee_profile'):
+        if not (request.user.is_superuser or hasattr(request.user, 'employee_profile')):
             raise PermissionDenied('Employee access required.')
         return view_func(request, *args, **kwargs)
 

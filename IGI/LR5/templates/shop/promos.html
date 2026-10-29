@@ -1,11 +1,52 @@
 {% extends 'base.html' %}
 {% block title %}Promos{% endblock %}
+
+{% block meta_description %}<meta name="description" content="Active promo codes and discounts of our confectionery shop.">{% endblock %}
+{% block meta_keywords %}<meta name="keywords" content="promo codes, discounts, promotions, confectionery">{% endblock %}
+
 {% block content %}
-<h2>Promo codes &amp; coupons</h2>
-<h3>Active promos</h3>
-<ul>{% for p in active_promos %}<li>{{ p.code }} — {{ p.discount_percent }}% — {{ p.description }}</li>{% empty %}<li>None</li>{% endfor %}</ul>
-<h3>Archive</h3>
-<ul>{% for p in archived_promos %}<li>{{ p.code }} (archived)</li>{% empty %}<li>None</li>{% endfor %}</ul>
-<h3>Coupons</h3>
-<ul>{% for c in coupons %}<li>{{ c.title }} — {{ c.amount_off }} BYN — {% if c.is_active %}active{% else %}inactive{% endif %}</li>{% endfor %}</ul>
+<h2>Promo codes</h2>
+
+<section id="active-promos">
+	<h3>Active promos</h3>
+	{% if active_promos %}
+	<table>
+		<caption>Active promo codes and their discounts</caption>
+		<colgroup>
+			<col>
+			<col>
+			<col>
+		</colgroup>
+		<thead>
+			<tr>
+				<th id="h-code" scope="col">Code</th>
+				<th id="h-discount" scope="col">Discount</th>
+				<th id="h-description" scope="col">Description</th>
+			</tr>
+		</thead>
+		<tbody>
+			{% for p in active_promos %}
+			<tr id="promo-{{ p.pk }}" itemscope itemtype="https://schema.org/Offer" itemid="{% url 'promos' %}#promo-{{ p.pk }}">
+				<td headers="h-code"><code itemprop="name">{% if user.is_staff %}<a href="{% url 'promo_edit' pk=p.pk %}" title="Edit promo code">{{ p.code }}</a>{% else %}{{ p.code }}{% endif %}</code></td>
+				<td headers="h-discount"><mark><data value="{{ p.discount_percent }}">{{ p.discount_percent }}%</data></mark></td>
+				<td headers="h-description" itemprop="description">{{ p.description }}</td>
+			</tr>
+			{% endfor %}
+		</tbody>
+	</table>
+	{% else %}
+	<p>None</p>
+	{% endif %}
+</section>
+
+<section id="archived-promos">
+	<h3>Archive</h3>
+	<ul>
+		{% for p in archived_promos %}<li><s><code>{{ p.code }}</code></s></li>{% empty %}<li>None</li>{% endfor %}
+	</ul>
+</section>
+
+{% if user.is_staff %}
+<p><a href="{% url 'promo_create' %}" accesskey="a" title="Add a new promo code">Add promocode</a></p>
+{% endif %}
 {% endblock %}

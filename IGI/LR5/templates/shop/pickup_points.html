@@ -1,6 +1,31 @@
 {% extends 'base.html' %}
 {% block title %}Pickup points{% endblock %}
+
+{% block meta_description %}<meta name="description" content="Pickup points where you can collect your confectionery orders: addresses, phones and working hours.">{% endblock %}
+{% block meta_keywords %}<meta name="keywords" content="pickup points, addresses, working hours, confectionery">{% endblock %}
+
 {% block content %}
 <h2>Pickup points</h2>
-<ul>{% for p in points %}<li><strong>{{ p.name }}</strong> — {{ p.address }} — {{ p.phone }} — {{ p.working_hours }}</li>{% endfor %}</ul>
+
+{% if user.is_staff %}
+<p><a href="{% url 'pickup_create' %}" accesskey="a" title="Add a new pickup point">Add pickup point</a></p>
+{% endif %}
+
+<section id="pickup-points">
+	{% for p in points %}
+	<article id="pickup-{{ p.pk }}" itemscope itemtype="https://schema.org/LocalBusiness" itemid="{% url 'pickup_points' %}#pickup-{{ p.pk }}">
+		<h3 itemprop="name">{% if user.is_staff %}<a href="{% url 'pickup_edit' pk=p.pk %}" title="Edit pickup point">{{ p.name }}</a>{% else %}{{ p.name }}{% endif %}</h3>
+		<dl>
+			<dt>Address</dt>
+			<dd><address itemprop="address" style="font-style: normal;">{{ p.address }}</address></dd>
+			<dt>Phone</dt>
+			<dd><a itemprop="telephone" href="tel:{{ p.phone|cut:' '|cut:'-'|cut:'('|cut:')' }}">{{ p.phone }}</a></dd>
+			{% if p.working_hours %}
+			<dt>Working hours</dt>
+			<dd itemprop="openingHours">{{ p.working_hours }}</dd>
+			{% endif %}
+		</dl>
+	</article>
+	{% endfor %}
+</section>
 {% endblock %}

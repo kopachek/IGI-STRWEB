@@ -1,0 +1,81 @@
+{% extends 'base.html' %}
+{% load images %}
+{% block title %}{{ product.name }}{% endblock %}
+
+{% block meta_description %}<meta name="description" content="{{ product.name }} — {{ product.price }} BYN. {{ product.category.name }} from our confectionery shop.">{% endblock %}
+{% block meta_keywords %}<meta name="keywords" content="{{ product.name }}, {{ product.category.name }}, buy, confectionery">{% endblock %}
+
+{% block content %}
+<style>
+  .product-detail { display: flex; flex-wrap: wrap; gap: 24px; align-items: flex-start; }
+  .product-detail figure { margin: 0; flex: 0 1 360px; width: 100%; max-width: 360px; }
+  .product-detail .thumb { display: block; width: 100%; aspect-ratio: 1 / 1; object-fit: cover; object-position: center; background: #f2f2f2; }
+  .product-detail .info { flex: 1 1 280px; }
+  .product-detail .price { font-size: 1.4em; margin: 8px 0; }
+  .product-detail dl { margin: 8px 0; }
+  .product-detail dt { font-weight: bold; }
+  .product-detail dd { margin: 0 0 8px 0; }
+  .product-detail fieldset { border: 1px solid #ccc; border-radius: 6px; padding: 10px 14px; margin: 12px 0; }
+</style>
+
+<article id="product-{{ product.pk }}" class="product-detail" itemscope itemtype="https://schema.org/Product" itemid="{% url 'product_detail' pk=product.pk %}">
+	<figure>
+		{% if product.image %}
+		<picture>
+			<source type="image/webp" srcset="{% srcset product.image %}" sizes="(max-width: 700px) 100vw, 360px">
+			<img class="thumb" itemprop="image" src="{{ product.image.url }}" alt="{{ product.name }}">
+		</picture>
+		{% else %}
+		<div class="thumb"></div>
+		{% endif %}
+	</figure>
+
+	<div class="info">
+		<h2 itemprop="name">{{ product.name }}</h2>
+
+		<div class="price" itemprop="offers" itemscope itemtype="https://schema.org/Offer">
+			<meta itemprop="priceCurrency" content="BYN">
+			<meta itemprop="availability" content="https://schema.org/{% if product.is_available %}InStock{% else %}OutOfStock{% endif %}">
+			<strong><data itemprop="price" value="{{ product.price }}">{{ product.price }}</data> <abbr title="Belarusian ruble">BYN</abbr></strong> / {{ product.get_unit_display }}
+		</div>
+
+		<dl>
+			<dt>Category</dt>
+			<dd itemprop="category">{{ product.category.name }}</dd>
+			{% if product.manufacturer %}
+			<dt>Manufacturer</dt>
+			<dd itemprop="brand" itemscope itemtype="https://schema.org/Organization"><span itemprop="name" translate="no">{{ product.manufacturer.name }}</span></dd>
+			{% endif %}
+		</dl>
+
+		{% if product.description %}<p itemprop="description">{{ product.description }}</p>{% endif %}
+
+		{% if not product.is_available %}
+		<p><mark>Currently unavailable.</mark></p>
+		{% elif can_buy %}
+		<form id="add-to-cart" method="post" action="{% url 'cart_add' %}">
+			{% csrf_token %}
+			<fieldset>
+				<legend>Add to cart</legend>
+				<input type="hidden" name="product_id" value="{{ product.pk }}">
+				<p>
+					<label for="quantity">Quantity ({{ product.get_unit_display }})</label>
+					<input type="number" id="quantity" name="quantity" value="1" required
+						min="{{ product.qty_min }}" max="100" step="{{ product.qty_step_attr }}"
+						inputmode="{% if product.is_countable %}numeric{% else %}decimal{% endif %}"
+						aria-describedby="quantity-hint">
+					<br><small id="quantity-hint">{% if product.is_countable %}Whole numbers only.{% else %}Fractions allowed, for example 0.5.{% endif %}</small>
+				</p>
+				<button type="submit" accesskey="c" title="Add this product to the cart">Add to cart</button>
+			</fieldset>
+		</form>
+		{% elif user.is_authenticated %}
+		<p>Only customer accounts can place orders.</p>
+		{% else %}
+		<p><a href="{% url 'login' %}?next={{ request.path }}" title="Log in to buy">Log in</a> to add to cart.</p>
+		{% endif %}
+
+		<p><a href="{% url 'product_list' %}" accesskey="b" rel="up" hreflang="en" type="text/html" title="Back to the catalog">Back to products</a></p>
+	</div>
+</article>
+{% endblock %}

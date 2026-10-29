@@ -1,15 +1,57 @@
 {% extends 'base.html' %}
+{% load images %}
+
 {% block title %}News{% endblock %}
+
+{% block meta_description %}<meta name="description" content="Latest news and updates.">{% endblock %}
+{% block meta_keywords %}<meta name="keywords" content="news, articles, updates">{% endblock %}
+
 {% block content %}
 <h2>News</h2>
-<ul>
-{% for a in articles %}
-  <li>
-    <h3>{{ a.title }}</h3>
-    <p>{{ a.summary }}</p>
-    {% if a.image %}<img src="{{ a.image.url }}" alt="{{ a.title }}" width="200">{% endif %}
-    <p>{{ a.published_at|date:"d/m/Y" }}</p>
-  </li>
-{% empty %}<li>No articles.</li>{% endfor %}
-</ul>
+
+{% if user.is_staff %}
+<p><a href="{% url 'article_create' %}" accesskey="a" title="Add a new article">Add article</a></p>
+{% endif %}
+
+<section id="articles">
+	<ul>
+		{% for a in articles %}
+		<li>
+			<article id="article-{{ a.pk }}" itemscope itemtype="https://schema.org/NewsArticle" itemid="{% url 'article_detail' pk=a.pk %}">
+				<header>
+					<h3 itemprop="headline">
+						{% if user.is_staff %}
+						<a href="{% url 'article_edit' pk=a.pk %}" title="Edit article">{{ a.title }}</a>
+						{% else %}
+						{{ a.title }}
+						{% endif %}
+					</h3>
+					<p>
+						<time itemprop="datePublished" datetime="{{ a.published_at|date:'c' }}">
+							{{ a.published_at|date:"d/m/Y H:i" }}
+						</time>
+					</p>
+				</header>
+
+				{% if a.image %}
+				<figure>
+					<picture>
+						<source type="image/webp" srcset="{% srcset a.image %}" sizes="200px">
+						<img itemprop="image" src="{{ a.image.url }}" alt="{{ a.title }}" width="200" loading="lazy">
+					</picture>
+				</figure>
+				{% endif %}
+
+				<p itemprop="description">{{ a.summary }}</p>
+				<p>
+					<a itemprop="url" href="{% url 'article_detail' pk=a.pk %}" rel="bookmark" hreflang="en" type="text/html" title="Read the full article">Read more &rarr;</a>
+				</p>
+			</article>
+		</li>
+		{% empty %}
+		<li>No articles.</li>
+		{% endfor %}
+	</ul>
+</section>
+
 {% endblock %}

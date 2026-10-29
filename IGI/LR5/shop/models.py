@@ -18,6 +18,10 @@ from django.utils import timezone
 
 from shop.validators import validate_adult_age, validate_belarus_phone
 
+from shop.upload import UploadPath
+
+from shop.images import make_variants
+
 
 class TimeStampedModel(models.Model):
     """Abstract base with created/updated timestamps (stored in UTC)."""
@@ -28,14 +32,51 @@ class TimeStampedModel(models.Model):
     class Meta:
         abstract = True
 
+class ResponsiveImagesMixin(models.Model):
+    """Creates smaller copies of the image fields listed in `responsive_fields` on save."""
 
-class Manufacturer(TimeStampedModel):
+    responsive_fields = ()
+
+    class Meta:
+        abstract = True
+
+    def save(self, *args, **kwargs):
+        pending = {}
+        for fname in self.responsive_fields:
+            f = getattr(self, fname)
+            if f and not f._committed:  # a new upload
+                f.file.seek(0)
+                pending[fname] = f.file.read()
+                f.file.seek(0)
+        super().save(*args, **kwargs)
+        for fname, data in pending.items():
+            make_variants(getattr(self, fname), data)
+
+class Banner(ResponsiveImagesMixin, TimeStampedModel):
+    """Advertising banner on the home page."""
+
+    responsive_fields = ('image',)
+    title = models.CharField(max_length=150, blank=True)
+    image = models.ImageField(upload_to=UploadPath('banners'))
+    link = models.URLField(blank=True)
+    is_active = models.BooleanField(default=True)
+    order = models.PositiveSmallIntegerField(default=0)
+
+    class Meta:
+        ordering = ['order', '-created_at']
+
+    def __str__(self) -> str:
+        return self.title or f'Banner #{self.pk}'
+
+class Manufacturer(ResponsiveImagesMixin, TimeStampedModel):
     """Sweet manufacturer / supplier firm."""
 
+    responsive_fields = ('logo',)
     name = models.CharField(max_length=200, unique=True)
     country = models.CharField(max_length=100, blank=True)
     website = models.URLField(blank=True)
     description = models.TextField(blank=True)
+    logo = models.ImageField(upload_to=UploadPath('manufacturers'), blank=True, null=True)
 
     class Meta:
         ordering = ['name']
@@ -44,11 +85,13 @@ class Manufacturer(TimeStampedModel):
         return self.name
 
 
-class ProductCategory(TimeStampedModel):
+class ProductCategory(ResponsiveImagesMixin, TimeStampedModel):
     """Type of confectionery product (cakes, candies, etc.)."""
 
+    responsive_fields = ('image',)
     name = models.CharField(max_length=150, unique=True)
     description = models.TextField(blank=True)
+    image = models.ImageField(upload_to=UploadPath('product_categories'), blank=True, null=True)
 
     class Meta:
         verbose_name_plural = 'product categories'
@@ -58,7 +101,7 @@ class ProductCategory(TimeStampedModel):
         return self.name
 
 
-class Product(TimeStampedModel):
+class Product(ResponsiveImagesMixin, TimeStampedModel):
     """Confectionery item with price and unit of measurement."""
 
     class Unit(models.TextChoices):
@@ -66,6 +109,7 @@ class Product(TimeStampedModel):
         KILOGRAMS = 'kg', 'Kilograms'
         LITERS = 'l', 'Liters'
 
+    responsive_fields = ('image',)
     name = models.CharField(max_length=200)
     price = models.DecimalField(max_digits=10, decimal_places=2, validators=[MinValueValidator(Decimal('0.01'))])
     unit = models.CharField(max_length=10, choices=Unit.choices, default=Unit.PIECES)
@@ -73,12 +117,31 @@ class Product(TimeStampedModel):
     manufacturer = models.ForeignKey(Manufacturer, on_delete=models.SET_NULL, null=True, blank=True, related_name='products')
     description = models.TextField(blank=True)
     is_available = models.BooleanField(default=True)
+    image = models.ImageField(upload_to=UploadPath('products'), blank=True, null=True)
 
     class Meta:
         ordering = ['name']
 
     def __str__(self) -> str:
         return f'{self.name} ({self.get_unit_display()})'
+
+    @property
+    def is_countable(self) -> bool:
+        """True for items sold by the piece (whole quantities only)."""
+        return self.unit == self.Unit.PIECES
+
+    @property
+    def qty_step(self) -> Decimal:
+        return Decimal('1') if self.is_countable else Decimal('0.1')
+
+    @property
+    def qty_min(self) -> Decimal:
+        return self.qty_step
+
+    @property
+    def qty_step_attr(self) -> str:
+        """Value for the HTML `step` attribute."""
+        return '1' if self.is_countable else 'any'
 
 
 class ClientProfile(TimeStampedModel):
@@ -154,32 +217,15 @@ class PromoCode(TimeStampedModel):
     def is_archived(self) -> bool:
         return not self.is_active
 
-
-class Coupon(TimeStampedModel):
-    """Fixed-amount coupon (guest-visible list)."""
-
-    title = models.CharField(max_length=150)
-    amount_off = models.DecimalField(max_digits=8, decimal_places=2)
-    is_active = models.BooleanField(default=True)
-    description = models.TextField(blank=True)
-
-    class Meta:
-        ordering = ['-is_active', 'title']
-
-    def __str__(self) -> str:
-        return self.title
-
-
 class Order(TimeStampedModel):
-    """Sale record: client, dates, delivery, linked products via OrderItem."""
+    """Sale record: client, dates, linked products via OrderItem."""
 
     client = models.ForeignKey(ClientProfile, on_delete=models.PROTECT, related_name='orders')
     employee = models.ForeignKey(EmployeeProfile, on_delete=models.SET_NULL, null=True, blank=True, related_name='orders')
     pickup_point = models.ForeignKey(PickupPoint, on_delete=models.SET_NULL, null=True, blank=True)
     promo_code = models.ForeignKey(PromoCode, on_delete=models.SET_NULL, null=True, blank=True)
     sale_date = models.DateTimeField(default=timezone.now)
-    delivery_date = models.DateField()
-    delivery_cost = models.DecimalField(max_digits=8, decimal_places=2, default=Decimal('0.00'))
+    pickup_date = models.DateField()
     notes = models.TextField(blank=True)
     products = models.ManyToManyField(Product, through='OrderItem', related_name='orders')
 
@@ -196,17 +242,16 @@ class Order(TimeStampedModel):
             return Decimal('0.00')
         return round(total, 2) or Decimal('0.00')
 
-    @property
-    def grand_total(self) -> Decimal:
-        return round(self.items_total + self.delivery_cost, 2)
-
 
 class OrderItem(models.Model):
     """Line item in an order (M2M through table)."""
 
     order = models.ForeignKey(Order, on_delete=models.CASCADE, related_name='items')
     product = models.ForeignKey(Product, on_delete=models.CASCADE, related_name='order_items')
-    quantity = models.IntegerField(default=1, validators=[MinValueValidator(1)])
+    quantity = models.DecimalField(
+        max_digits=8, decimal_places=3, default=Decimal('1'),
+        validators=[MinValueValidator(Decimal('0.001'))],
+    )
     unit_price = models.DecimalField(max_digits=10, decimal_places=2)
 
     class Meta:
@@ -225,16 +270,14 @@ class OrderItem(models.Model):
         super().save(*args, **kwargs)
 
 
-# --- Common site pages (DB-backed content) ---
-
-
-class Article(TimeStampedModel):
+class Article(ResponsiveImagesMixin, TimeStampedModel):
     """News / blog article."""
-
+    
+    responsive_fields = ('image',)
     title = models.CharField(max_length=250)
     summary = models.CharField(max_length=300, help_text='One sentence summary.')
     body = models.TextField()
-    image = models.ImageField(upload_to='articles/', blank=True, null=True)
+    image = models.ImageField(upload_to=UploadPath('articles'), blank=True, null=True)
     is_published = models.BooleanField(default=True)
     published_at = models.DateTimeField(default=timezone.now)
 
@@ -250,7 +293,7 @@ class CompanyInfo(TimeStampedModel):
 
     title = models.CharField(max_length=200, default='About our confectionery')
     content = models.TextField()
-    logo = models.ImageField(upload_to='company/', blank=True, null=True)
+    logo = models.ImageField(upload_to=UploadPath('company'), blank=True, null=True)
 
     def __str__(self) -> str:
         return self.title
@@ -275,6 +318,8 @@ class FAQEntry(TimeStampedModel):
 
     question = models.CharField(max_length=300)
     answer = models.TextField()
+    published_at = models.DateTimeField(default=timezone.now)
+
 
     class Meta:
         ordering = ['-created_at']
@@ -285,14 +330,15 @@ class FAQEntry(TimeStampedModel):
         return self.question
 
 
-class ContactPerson(TimeStampedModel):
+class ContactPerson(ResponsiveImagesMixin, TimeStampedModel):
     """Staff shown on contacts page."""
 
+    responsive_fields = ('photo',)
     full_name = models.CharField(max_length=150)
     role_description = models.CharField(max_length=250)
     phone = models.CharField(max_length=22, validators=[validate_belarus_phone])
     email = models.EmailField()
-    photo = models.ImageField(upload_to='contacts/', blank=True, null=True)
+    photo = models.ImageField(upload_to=UploadPath('contacts'), blank=True, null=True)
 
     class Meta:
         ordering = ['full_name']

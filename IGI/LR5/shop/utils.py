@@ -48,7 +48,7 @@ def text_calendar(year: int, month: int) -> str:
 
 def sales_statistics() -> dict[str, Any]:
     """Compute sales stats for dashboard."""
-    order_totals = [float(order.grand_total) for order in Order.objects.prefetch_related('items')]
+    order_totals = [float(order.items_total) for order in Order.objects.prefetch_related('items')]
 
     ages = [c.age for c in ClientProfile.objects.all()]
 
@@ -69,7 +69,7 @@ def sales_statistics() -> dict[str, Any]:
 
     total_sales = Decimal('0')
     for order in Order.objects.prefetch_related('items'):
-        total_sales += order.grand_total
+        total_sales += order.items_total
 
     stats: dict[str, Any] = {
         'order_totals': order_totals,

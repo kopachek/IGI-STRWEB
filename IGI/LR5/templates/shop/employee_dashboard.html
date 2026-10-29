@@ -1,9 +1,55 @@
 {% extends 'base.html' %}
 {% block title %}Employee dashboard{% endblock %}
+
+{% block meta_description %}<meta name="description" content="Employee dashboard: assigned clients, orders and sales.">{% endblock %}
+{% block meta_keywords %}<meta name="keywords" content="employee, clients, orders, sales, dashboard">{% endblock %}
+
 {% block content %}
-<h2>Employee: {{ employee }}</h2>
-<h3>Your clients</h3>
-<ul>{% for c in clients %}<li>{{ c }} — {{ c.phone }} — {{ c.email }}</li>{% empty %}<li>No assigned clients</li>{% endfor %}</ul>
-<h3>Orders &amp; sales</h3>
-<ul>{% for o in orders %}{% if o.grand_total == 0 %}{% else %}<li>#{{ o.pk }} — {{ o.client }} — {{ o.sale_date|date:"d/m/Y" }} — total {{ o.grand_total }} BYN</li>{% endif %}{% endfor %}</ul>
+<h2 itemscope itemtype="https://schema.org/Person">Employee: <span itemprop="name">{{ employee }}</span></h2>
+
+<section id="clients">
+	<h3>Your clients</h3>
+	<ul>
+		{% for c in clients %}
+		<li id="client-{{ c.pk }}" itemscope itemtype="https://schema.org/Person">
+			<span itemprop="name">{{ c }}</span> —
+			<a itemprop="telephone" href="tel:{{ c.phone|cut:' '|cut:'-'|cut:'('|cut:')' }}">{{ c.phone }}</a> —
+			<a itemprop="email" href="mailto:{{ c.email }}">{{ c.email }}</a>
+		</li>
+		{% empty %}<li>No assigned clients</li>{% endfor %}
+	</ul>
+</section>
+
+<section id="orders">
+	<h3>Orders &amp; sales</h3>
+	{% if orders %}
+	<table>
+		<caption>Orders and sales of your clients</caption>
+		<colgroup>
+			<col>
+			<col>
+			<col>
+			<col>
+		</colgroup>
+		<thead>
+			<tr>
+				<th id="h-order" scope="col">Order</th>
+				<th id="h-client" scope="col">Client</th>
+				<th id="h-date" scope="col">Sale date</th>
+				<th id="h-total" scope="col">Total (<abbr title="Belarusian ruble">BYN</abbr>)</th>
+			</tr>
+		</thead>
+		<tbody>
+			{% for o in orders %}{% if o.items_total == 0 %}{% else %}
+			<tr id="order-{{ o.pk }}" itemscope itemtype="https://schema.org/Order" itemid="{% url 'employee_dashboard' %}#order-{{ o.pk }}">
+				<td headers="h-order">#<span itemprop="orderNumber">{{ o.pk }}</span></td>
+				<td headers="h-client" itemprop="customer">{{ o.client }}</td>
+				<td headers="h-date"><time itemprop="orderDate" datetime="{{ o.sale_date|date:'Y-m-d' }}">{{ o.sale_date|date:"d/m/Y" }}</time></td>
+				<td headers="h-total"><strong><data value="{{ o.items_total }}">{{ o.items_total }}</data></strong></td>
+			</tr>
+			{% endif %}{% endfor %}
+		</tbody>
+	</table>
+	{% endif %}
+</section>
 {% endblock %}

@@ -1,27 +1,78 @@
 {% extends 'base.html' %}
+{% load images %}
 {% block title %}Products{% endblock %}
+
+{% block meta_description %}<meta name="description" content="Catalog of our confectionery shop: cakes, pastries, chocolate and candies with prices.">{% endblock %}
+{% block meta_keywords %}<meta name="keywords" content="products, catalog, cakes, sweets, chocolate, prices, confectionery">{% endblock %}
+
 {% block content %}
+<style>
+.product-card { border: 1px solid #ccc; padding: 8px; }
+.product-card.unavailable { opacity: .6; }
+.product-card figure { margin: 0; }
+.product-card .thumb {
+	display: block;
+	width: 100%;
+	aspect-ratio: 1 / 1;
+	object-fit: cover;
+	object-position: center;
+	background: #f2f2f2;
+}
+</style>
 <h2>Products</h2>
-<form method="get">
-  {{ filter_form.as_p }}
-  <button type="submit">Filter / search</button>
+
+<form id="product-filter" method="get" action="{% url 'product_list' %}" autocomplete="off">
+	{{ filter_form.as_p }}
+	<button type="submit" accesskey="f" title="Apply filter and search">Filter / search</button>
 </form>
-<table border="1" cellpadding="4">
-  <tr><th>Name</th><th>Category</th><th>Price (BYN)</th><th>Unit</th></tr>
-  {% for p in products %}
-  <tr>
-    {% if user.is_staff%}
-    <td><a href="{% url 'product_edit' pk=p.pk %}">{{ p.name }}</a></td>
-    {% else %}
-    <td>{{ p.name }}</td>
-    {% endif %}
-    <td>{{ p.category.name }}</td>
-    <td>{{ p.price }}</td>
-    <td>{{ p.get_unit_display }}</td>
-  </tr>
-  {% empty %}<tr><td colspan="5">No products</td></tr>{% endfor %}
-</table>
+
 {% if user.is_staff %}
-<p><a href="{% url 'product_create' %}">Create product</a></p>
+<p><a href="{% url 'product_create' %}" accesskey="a" title="Add a new product">Create product</a></p>
 {% endif %}
+
+<section id="products" style="display:grid; grid-template-columns:repeat(auto-fill, minmax(200px, 1fr)); gap:16px; margin-top:16px" itemscope itemtype="https://schema.org/ItemList">
+	{% for p in products %}
+	<article id="product-{{ p.pk }}" class="product-card{% if not p.is_available %} unavailable{% endif %}" itemscope itemprop="itemListElement" itemtype="https://schema.org/Product" itemid="{% url 'product_detail' pk=p.pk %}">
+		<a itemprop="url" href="{% url 'product_detail' pk=p.pk %}" rel="bookmark" hreflang="en" type="text/html" title="Product details">
+			<figure>
+				{% if p.image %}
+				<picture>
+					<source type="image/webp" srcset="{% srcset p.image %}" sizes="(max-width: 600px) 45vw, 220px">
+					<img class="thumb" itemprop="image" src="{{ p.image.url }}" alt="{{ p.name }}" loading="lazy">
+				</picture>
+				{% else %}
+				<div class="thumb"></div>
+				{% endif %}
+				<figcaption><h3 itemprop="name" style="margin:8px 0 4px">{{ p.name }}</h3></figcaption>
+			</figure>
+		</a>
+		<div itemprop="category">{{ p.category.name }}</div>
+		{% if p.manufacturer %}
+		<div itemprop="brand" itemscope itemtype="https://schema.org/Organization" style="display:flex; align-items:center; gap:6px; margin:4px 0">
+			{% if p.manufacturer.logo %}
+			<picture>
+				<source type="image/webp" srcset="{% srcset p.manufacturer.logo %}" sizes="40px">
+				<img itemprop="logo" src="{{ p.manufacturer.logo.url }}" alt="" height="24" loading="lazy">
+			</picture>
+			{% endif %}
+			<small itemprop="name" translate="no">{{ p.manufacturer.name }}</small>
+		</div>
+		{% endif %}
+		<div itemprop="offers" itemscope itemtype="https://schema.org/Offer">
+			<meta itemprop="priceCurrency" content="BYN">
+			<meta itemprop="availability" content="https://schema.org/{% if p.is_available %}InStock{% else %}OutOfStock{% endif %}">
+			<strong><data itemprop="price" value="{{ p.price }}">{{ p.price }}</data> <abbr title="Belarusian ruble">BYN</abbr></strong> / {{ p.get_unit_display }}
+		</div>
+		{% if not p.is_available %}<div>Unavailable</div>{% endif %}
+		{% if user.is_staff %}
+		<nav style="margin-top:6px">
+			<a href="{% url 'product_edit' pk=p.pk %}" title="Edit product">Edit</a> |
+			<a href="{% url 'product_delete' pk=p.pk %}" title="Delete product">Delete</a>
+		</nav>
+		{% endif %}
+	</article>
+	{% empty %}
+	<p>No products</p>
+	{% endfor %}
+</section>
 {% endblock %}

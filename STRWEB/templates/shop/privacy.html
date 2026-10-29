@@ -1,0 +1,128 @@
+{% extends 'base.html' %}
+{% block title %}Privacy{% endblock %}
+
+{% block meta_description %}<meta name="description" content="Privacy policy of our confectionery shop: what personal data we collect, why, and how you can control it.">{% endblock %}
+{% block meta_keywords %}<meta name="keywords" content="privacy policy, personal data, cookies, confectionery">{% endblock %}
+
+{% block content %}
+<article id="privacy-policy" itemscope itemtype="https://schema.org/WebPage" itemid="{% url 'privacy' %}">
+	<header>
+		<h2 itemprop="name">Privacy policy</h2>
+		<p>Last updated: <time itemprop="dateModified" datetime="2026-10-26">26 October 2026</time></p>
+		<p>Personal data of users is collected to form statistics and is not shared with any 3rd parties.</p>
+		<blockquote>
+			<p><mark>We collect only the data that is needed to process your orders and to keep the site running.</mark></p>
+			<footer>&mdash; <cite translate="no">Confectionery Shop</cite></footer>
+		</blockquote>
+	</header>
+
+	<nav aria-label="Privacy policy contents">
+		<h3>Contents</h3>
+		<ol>
+			<li><a href="#terms" tabindex="20">Terms</a></li>
+			<li><a href="#data" tabindex="21">Data we collect</a></li>
+			<li><a href="#cookies" tabindex="22">Cookies</a></li>
+			<li><a href="#rights" tabindex="23">Your rights</a></li>
+			<li><a href="#contact" tabindex="24">Contact us</a></li>
+		</ol>
+	</nav>
+	<hr>
+
+	<section id="terms">
+		<h3>1. Terms</h3>
+		<dl>
+			<dt><dfn>Personal data</dfn></dt>
+			<dd>Any information that relates to an identified or identifiable person, such as a name, phone number or e-mail address.</dd>
+			<dt><dfn>Account</dfn></dt>
+			<dd>Your registered profile on this site, used to place orders and to leave reviews.</dd>
+			<dt><dfn>Order</dfn></dt>
+			<dd>A purchase made through the cart, together with its delivery date, pickup point and promo code.</dd>
+		</dl>
+	</section>
+	<hr>
+
+	<section id="data">
+		<h3>2. Data we collect</h3>
+		<table>
+			<caption>Categories of personal data and the purposes of their use</caption>
+			<colgroup>
+				<col>
+				<col>
+				<col>
+			</colgroup>
+			<thead>
+				<tr>
+					<th id="h-category" scope="col">Category</th>
+					<th id="h-examples" scope="col">Examples</th>
+					<th id="h-purpose" scope="col">Purpose</th>
+				</tr>
+			</thead>
+			<tbody>
+				<tr>
+					<th id="r-account" scope="row">Account</th>
+					<td headers="r-account h-examples">Username, first and last name, password (stored in hashed form)</td>
+					<td headers="r-account h-purpose">Sign-in and identification</td>
+				</tr>
+				<tr>
+					<th id="r-contact" scope="row">Contact details</th>
+					<td headers="r-contact h-examples">Phone number, e-mail address, delivery address, date of birth</td>
+					<td headers="r-contact h-purpose">Order processing, delivery, age check</td>
+				</tr>
+				<tr>
+					<th id="r-orders" scope="row">Orders</th>
+					<td headers="r-orders h-examples">Products, quantities, delivery date, pickup point, promo code</td>
+					<td headers="r-orders h-purpose">Order fulfilment, purchase history, statistics</td>
+				</tr>
+				<tr>
+					<th id="r-reviews" scope="row">Reviews</th>
+					<td headers="r-reviews h-examples">Author name, rating, review text</td>
+					<td headers="r-reviews h-purpose">Publication on the Reviews page</td>
+				</tr>
+			</tbody>
+			<tfoot>
+				<tr>
+					<td colspan="3">Payment card details are not collected or stored by this site.</td>
+				</tr>
+			</tfoot>
+		</table>
+	</section>
+	<hr>
+
+	<section id="cookies">
+		<h3>3. Cookies</h3>
+		<p>The site uses only technical cookies that are required for it to work:</p>
+		<dl>
+			<dt><code>sessionid</code></dt>
+			<dd>Keeps you signed in and remembers the contents of your cart.</dd>
+			<dt><code>csrftoken</code></dt>
+			<dd>Protects forms from forged requests.</dd>
+		</dl>
+		<details>
+			<summary>Can I disable cookies?</summary>
+			<p>Yes, in your browser settings. Please note that without these cookies you will not be able to sign in or use the cart.</p>
+		</details>
+	</section>
+	<hr>
+
+	<section id="rights">
+		<h3>4. Your rights</h3>
+		<p>You may at any time:</p>
+		<ol>
+			<li>ask which of your personal data we store;</li>
+			<li>ask us to correct inaccurate data;</li>
+			<li>ask us to delete your data;</li>
+			<li>withdraw your consent to the processing of your data.</li>
+		</ol>
+	</section>
+	<hr>
+
+	<section id="contact">
+		<h3>5. Contact us</h3>
+		<p>To exercise your rights, use the details on the <a href="{% url 'contacts' %}" hreflang="en" type="text/html" title="Contacts page">Contacts</a> page and use the subject <q>Personal data request</q>.</p>
+	</section>
+
+	<footer>
+		<p><a href="#privacy-policy" accesskey="t" title="Back to the top of the policy">Back to top</a></p>
+	</footer>
+</article>
+{% endblock %}

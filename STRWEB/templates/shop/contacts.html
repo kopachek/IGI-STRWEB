@@ -1,0 +1,27 @@
+{% extends 'base.html' %}
+{% load images %}
+{% block title %}Contacts{% endblock %}
+
+{% block meta_description %}<meta name="description" content="Contact details of our confectionery shop staff: phone numbers and e-mail addresses.">{% endblock %}
+{% block meta_keywords %}<meta name="keywords" content="contacts, phone, email, confectionery staff">{% endblock %}
+
+{% block content %}
+<h2>Contacts</h2>
+<section id="contacts">
+	<ul>
+		{% for p in people %}
+		<li id="contact-{{ p.pk }}" itemscope itemtype="https://schema.org/Person" itemid="{% url 'contacts' %}#contact-{{ p.pk }}">
+			{% if p.photo %}<img itemprop="image" src="{{ p.photo.url }}" alt="{{ p.full_name }}" width="120" loading="lazy">{% endif %}
+			<strong itemprop="name">{% if user.is_staff %}<a href="{% url 'contact_edit' pk=p.pk %}" title="Edit contact">{{ p.full_name }}</a>{% else %}{{ p.full_name }}{% endif %}</strong> — <span itemprop="jobTitle">{{ p.role_description }}</span>
+			<address style="font-style: normal;">
+				Phone: <a itemprop="telephone" href="tel:{{ p.phone|cut:' '|cut:'-'|cut:'('|cut:')' }}">{{ p.phone }}</a> |
+				Email: <a itemprop="email" href="mailto:{{ p.email }}">{{ p.email }}</a>
+			</address>
+		</li>
+		{% empty %}<li>No contacts.</li>{% endfor %}
+	</ul>
+</section>
+{% if user.is_staff %}
+<p><a href="{% url 'contact_create' %}" accesskey="a" title="Add a new contact">Add contact</a></p>
+{% endif %}
+{% endblock %}
