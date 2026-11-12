@@ -67,7 +67,6 @@ main h3 {
 	text-transform: capitalize;
 }
 
-/* Подзаголовки разделов страницы (<section><h3>): акцентная полоса + мягкая подложка */
 main section>h3 {
 	margin: 0 0 1.2rem;
 	padding: .3rem 0 .3rem .9rem;

@@ -9,7 +9,6 @@
 	box-shadow: 0 6px 18px rgba(71, 45, 48, .15);
 }
 
-/* ---------- сладости ---------- */
 .sky-sweets {
 	margin: 0;
 	padding: 0;
@@ -21,7 +20,7 @@
 	position: absolute;
 	top: 12px;
 	left: var(--x);
-	z-index: 1;              /* ниже облака: сладости «тонут» за ним */
+	z-index: 1;
 	width: 64px;
 	height: 64px;
 	margin-left: -32px;
@@ -54,7 +53,6 @@
 	}
 }
 
-/* ---------- облако ---------- */
 .cloud {
 	position: absolute;
 	z-index: 2;
