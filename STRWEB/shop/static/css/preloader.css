@@ -1,9 +1,4 @@
-/* preloader.css — «бесконечность» внизу страницы (чистая CSS-анимация).
-   Обычный блок в потоке страницы: не fixed, не перекрывает контент. */
-
 .infinity-loader {
-	--T: 2.4s;      /* время полного круга */
-	--r: 1.31;      /* радиус скругления в единицах pathLength: (stroke-width / 2) / длина пути * 100 = 3.5 / 266.2 * 100 */
 	position: static;
 	display: flex;
 	justify-content: center;
@@ -22,39 +17,31 @@
 	stroke-width: 7;
 }
 
-/* неподвижная «дорожка» фигуры */
 .infinity-loader .track {
 	stroke: var(--line);
 	stroke-linecap: round;
 	opacity: .7;
 }
 
-/* бегущая линия: 4 цвета, каждый занимает ровно 10% длины фигуры */
 .infinity-loader .run {
 	stroke-linecap: butt;
-	stroke-dasharray: 10.4 89.6; /* 10 + 0.4 перекрытия, чтобы не было швов */
-	animation: infinity-run var(--T) linear infinite;
-	/* --n: 0 — голова, 3 — хвост; каждый следующий отстаёт на 10% круга */
-	animation-delay: calc(var(--T) * -1 + var(--n) * var(--T) * .1);
+	stroke-dasharray: 10.4 89.6;
+	animation: infinity-run 2.4s linear infinite;
 }
 
-.infinity-loader .run.c0 { --n: 0; stroke: var(--wine-plum); }
-.infinity-loader .run.c1 { --n: 1; stroke: var(--vibrant-coral); }
-.infinity-loader .run.c2 { --n: 2; stroke: var(--soft-peach); }
-.infinity-loader .run.c3 { --n: 3; stroke: var(--dry-sage); }
+.infinity-loader .c0 { stroke: var(--wine-plum);     animation-delay: -2.4s; }
+.infinity-loader .c1 { stroke: var(--vibrant-coral); animation-delay: -2.16s; }
+.infinity-loader .c2 { stroke: var(--soft-peach);    animation-delay: -1.92s; }
+.infinity-loader .c3 { stroke: var(--dry-sage);      animation-delay: -1.7114s; }
 
-/* скруглённые концы только у головы (c0) и хвоста (c3).
-   Круглый кап добавляет r к длине, поэтому сам отрезок укорачивается на r —
-   видимая длина остаётся 10%. */
-.infinity-loader .run.c0 {
+.infinity-loader .c0 {
 	stroke-linecap: round;
-	stroke-dasharray: calc(10 - var(--r)) calc(90 + var(--r));
+	stroke-dasharray: 8.69 91.31;
 }
 
-.infinity-loader .run.c3 {
+.infinity-loader .c3 {
 	stroke-linecap: round;
-	stroke-dasharray: calc(10 - var(--r) + .4) calc(90 + var(--r) - .4);
-	animation-delay: calc(var(--T) * -1 + var(--n) * var(--T) * .1 - var(--r) * var(--T) / 100);
+	stroke-dasharray: 9.09 90.91;
 }
 
 @keyframes infinity-run {
@@ -63,7 +50,12 @@
 }
 
 @media (prefers-reduced-motion: reduce) {
-	.infinity-loader {
-		--T: 6s;
+	.infinity-loader .run {
+		animation-duration: 6s;
 	}
+
+	.infinity-loader .c0 { animation-delay: -6s; }
+	.infinity-loader .c1 { animation-delay: -5.4s; }
+	.infinity-loader .c2 { animation-delay: -4.8s; }
+	.infinity-loader .c3 { animation-delay: -4.2786s; }
 }
