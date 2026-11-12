@@ -1,0 +1,115 @@
+/* news.css — список новостей */
+
+.news-list {
+	display: grid;
+	gap: 1.5rem;
+	margin: 1.5rem 0 0;
+	padding: 0;
+	list-style: none;
+}
+
+.news-list li {
+	margin: 0;
+}
+
+/* Карточка: картинка + текст (flexbox) */
+.news-card {
+	display: flex;
+	gap: 1.5rem;
+	padding: 1rem;
+	/* нечётные карточки: тёплый персиковый тон, коралловая полоса сверху */
+	background: rgba(255, 225, 168, .45);
+	border: 1px solid #ecd3a0;
+	border-top: 4px solid var(--vibrant-coral);
+	box-shadow: 0 4px 12px rgba(71, 45, 48, .1);
+	transition: box-shadow .25s, transform .25s;
+}
+
+/* чётные карточки: приглушённый шалфейный тон, бордовая полоса */
+.news-list li:nth-child(even) .news-card {
+	background: rgba(201, 203, 163, .4);
+	border-color: var(--dry-sage);
+	border-top-color: var(--wine-plum);
+}
+
+.news-card:hover {
+	transform: translateY(-3px);
+	box-shadow: 0 10px 22px rgba(71, 45, 48, .2);
+}
+
+/* чётные карточки: картинка справа */
+.news-list li:nth-child(even) .news-card {
+	flex-direction: row-reverse;
+}
+
+.news-card figure {
+	flex: 0 0 260px;
+	align-self: flex-start;
+	margin: 0;
+}
+
+.news-card img {
+	display: block;
+	width: 100%;
+	height: auto;
+	aspect-ratio: 1 / 1;
+	/* квадрат */
+	object-fit: cover;
+	border: 3px solid var(--paper);
+	box-shadow: 0 2px 8px rgba(71, 45, 48, .2);
+}
+
+.news-body {
+	flex: 1 1 auto;
+	min-width: 0;
+	display: flex;
+	flex-direction: column;
+}
+
+.news-card h3 {
+	margin: 0 0 .2rem;
+	font-size: 1.6rem;
+}
+
+.news-card h3 a:link,
+.news-card h3 a:visited {
+	color: var(--wine-plum);
+}
+
+.news-date {
+	margin: 0 0 .8rem;
+	font-size: .95rem;
+	font-variant: small-caps;
+	letter-spacing: .04em;
+	color: #84696d;
+}
+
+/* Краткое содержание: фиксированная область, overflow и многоточие */
+.news-summary {
+	margin: 0 0 1rem;
+	max-height: 4.8em;
+	/* 3 строки при line-height 1.6 */
+	overflow: hidden;
+	text-overflow: ellipsis;
+	display: -webkit-box;
+	-webkit-box-orient: vertical;
+	-webkit-line-clamp: 3;
+	line-clamp: 3;
+}
+
+.news-more {
+	margin: auto 0 0;
+}
+
+@media (max-width: 700px) {
+
+	.news-card,
+	.news-list li:nth-child(even) .news-card {
+		flex-direction: column;
+	}
+
+	.news-card figure {
+		flex-basis: auto;
+		align-self: stretch;
+	}
+}

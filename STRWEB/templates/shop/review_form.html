@@ -1,9 +1,12 @@
 {% extends 'base.html' %}
+{% load static %}
 {% block title %}Add review{% endblock %}
-{% block robots %}<meta name="robots" content="noindex, nofollow">{% endblock %}
+{% block robots %}
+<meta name="robots" content="noindex, nofollow">{% endblock %}
+{% block extra_css %}<link rel="stylesheet" href="{% static 'css/forms.css' %}"><link rel="stylesheet" href="{% static 'css/pages/form_page.css' %}">{% endblock %}
 {% block content %}
 <h2>Add review</h2>
-<form method="post" novalidate>
+<form class="form-card" method="post" novalidate>
   {% csrf_token %}
   {{ form.as_p }}
   <button type="submit">Submit</button>

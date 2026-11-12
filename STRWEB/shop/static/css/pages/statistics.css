@@ -1,0 +1,96 @@
+/* statistics.css — статистика */
+
+#clients,
+#products,
+#chart {
+	margin-top: 2.5rem;
+}
+
+/* Сводка: сетка «показатель — значение» */
+#summary dl {
+	display: grid;
+	grid-template-columns: max-content 1fr;
+	max-width: 48rem;
+	margin: 1.5rem 0 0;
+	background: #fffdf7;
+	border: 1px solid var(--line);
+	border-left: 4px solid var(--wine-plum);
+}
+
+#summary dt,
+#summary dd {
+	margin: 0;
+	padding: .7rem 1.1rem;
+	border-bottom: 1px dashed var(--dry-sage);
+}
+
+#summary dt {
+	font-weight: 700;
+	font-variant: small-caps;
+	letter-spacing: .04em;
+	color: var(--wine-plum);
+	background: rgba(201, 203, 163, .35);
+}
+
+#summary dt:last-of-type,
+#summary dd:last-of-type {
+	border-bottom: 0;
+}
+
+#summary dd:first-of-type strong {
+	font-size: 1.5rem;
+	color: var(--wine-plum);
+}
+
+/* Списки клиентов и товаров */
+#clients ol,
+#products ol {
+	max-width: 36rem;
+	margin: 0;
+	padding-left: 2.2rem;
+}
+
+#clients li,
+#products li {
+	padding: .2rem .6rem;
+}
+
+#clients li:nth-child(odd),
+#products li:nth-child(odd) {
+	background: rgba(201, 203, 163, .3);
+}
+
+#clients li::marker,
+#products li::marker {
+	font-weight: 700;
+	color: var(--vibrant-coral);
+}
+
+#products data {
+	font-weight: 700;
+	color: var(--wine-plum);
+}
+
+/* График */
+#chart figure {
+	margin: 0;
+}
+
+#chart img {
+	display: block;
+	max-width: 100%;
+	height: auto;
+	border: 3px solid var(--paper);
+	box-shadow: 0 6px 18px rgba(71, 45, 48, .2);
+}
+
+@media (max-width: 600px) {
+	#summary dl {
+		grid-template-columns: 1fr;
+	}
+
+	#summary dt {
+		padding-bottom: 0;
+		border-bottom: 0;
+	}
+}

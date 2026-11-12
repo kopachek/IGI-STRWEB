@@ -1,0 +1,73 @@
+/* article_detail.css — страница статьи */
+
+.article-meta {
+	margin: 0 0 1.5rem;
+	font-variant: small-caps;
+	letter-spacing: .04em;
+	color: #84696d;
+}
+
+.article-figure {
+	margin: 0 0 2rem;
+}
+
+.article-figure img {
+	display: block;
+	width: 100%;
+	max-width: 440px;
+	height: auto;
+	border: 1px solid var(--line);
+	box-shadow: 0 6px 18px rgba(71, 45, 48, .15);
+}
+
+/* Текст статьи: по умолчанию одна колонка */
+.article-body {
+	max-width: 52rem;
+	text-align: justify;
+	hyphens: auto;
+}
+
+/* Многоколоночный макет: включается в шаблоне только для длинных статей */
+.article-body.columns {
+	max-width: none;
+	column-count: 2;
+	column-gap: 3rem;
+	column-rule: 1px solid var(--line);
+}
+
+.article-body p {
+	margin: 0 0 1rem;
+	text-indent: 1.5em;
+	/* красная строка */
+	line-height: 1.75;
+}
+
+.article-body p:first-child {
+	text-indent: 0;
+}
+
+/* буквица */
+.article-body p:first-child::first-letter {
+	float: left;
+	padding: .08em .12em 0 0;
+	font-family: "Cormorant Garamond", "Times New Roman", serif;
+	font-size: 3.6em;
+	line-height: .8;
+	color: var(--vibrant-coral);
+}
+
+.article-footer {
+	margin-top: 2.5rem;
+	padding-top: 1.2rem;
+	border-top: 1px solid var(--line);
+}
+
+.article-footer p {
+	margin: 0;
+}
+
+@media (max-width: 800px) {
+	.article-body.columns {
+		column-count: 1;
+	}
+}

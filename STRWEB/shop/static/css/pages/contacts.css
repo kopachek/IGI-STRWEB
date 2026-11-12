@@ -1,0 +1,102 @@
+/* contacts.css — контакты сотрудников (flexbox) */
+
+.contact-list {
+	display: grid;
+	grid-template-columns: repeat(auto-fill, minmax(520px, 1fr));
+	gap: 1.5rem;
+	margin: 1.5rem 0 0;
+	padding: 0;
+	list-style: none;
+}
+
+/* Карточка сотрудника: фото + информация (flexbox) */
+.contact-card {
+	display: flex;
+	flex-wrap: wrap;
+	align-items: flex-start;
+	gap: 1.2rem;
+	margin: 0;
+	padding: 1rem;
+	background: rgba(255, 225, 168, .45);
+	border: 1px solid #ecd3a0;
+	border-top: 4px solid var(--vibrant-coral);
+	box-shadow: 0 4px 12px rgba(71, 45, 48, .1);
+}
+
+.contact-list li:nth-child(even) {
+	background: rgba(201, 203, 163, .4);
+	border-color: var(--dry-sage);
+	border-top-color: var(--wine-plum);
+}
+
+.contact-card img {
+	display: block;
+	flex: 0 0 140px;
+	width: 140px;
+	height: 140px;
+	object-fit: cover;
+	border: 3px solid var(--paper);
+	box-shadow: 0 2px 8px rgba(71, 45, 48, .2);
+}
+
+.contact-info {
+	display: flex;
+	flex: 1 1 180px;
+	flex-direction: column;
+	gap: .3rem;
+	min-width: 0;
+}
+
+.contact-name {
+	font-family: "Cormorant Garamond", "Times New Roman", serif;
+	font-size: 1.7rem;
+	line-height: 1.15;
+	color: var(--wine-plum);
+}
+
+.contact-name a:link,
+.contact-name a:visited {
+	color: var(--wine-plum);
+}
+
+.contact-role {
+	align-self: flex-start;
+	padding: .2rem .8rem;
+	font-size: 1.05rem;
+	font-weight: 700;
+	line-height: 1.3;
+	color: var(--soft-peach);
+	background: var(--wine-plum);
+}
+
+.contact-info address {
+	display: flex;
+	flex-direction: column;
+	gap: .2rem;
+	margin-top: .6rem;
+	padding-top: .6rem;
+	font-size: 1.1rem;
+	border-top: 1px dashed var(--wine-plum);
+}
+
+.contact-info address a {
+	overflow-wrap: anywhere;
+}
+
+/* подписи вместо иконок из base.css */
+.contact-info address a::before {
+	content: none;
+}
+
+.contact-info .label {
+	font-weight: 700;
+	font-variant: small-caps;
+	letter-spacing: .04em;
+	color: var(--wine-plum);
+}
+
+@media (max-width: 600px) {
+	.contact-list {
+		grid-template-columns: 1fr;
+	}
+}

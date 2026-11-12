@@ -1,0 +1,65 @@
+/* purchase_history.css — мои заказы */
+
+#orders {
+	display: grid;
+	gap: 1.5rem;
+	max-width: 62rem;
+	margin-top: 1.5rem;
+}
+
+/* карточка заказа */
+#orders>article {
+	padding: 1rem 1.3rem;
+	background: rgba(255, 225, 168, .45);
+	border: 1px solid #ecd3a0;
+	border-top: 4px solid var(--vibrant-coral);
+	box-shadow: 0 4px 12px rgba(71, 45, 48, .1);
+}
+
+#orders>article:nth-child(even) {
+	background: rgba(201, 203, 163, .4);
+	border-color: var(--dry-sage);
+	border-top-color: var(--wine-plum);
+}
+
+#orders h3 {
+	margin: 0 0 .6rem;
+	font-size: 1.6rem;
+}
+
+.order-info {
+	margin: 0 0 .8rem;
+	padding-bottom: .8rem;
+	border-bottom: 1px dashed var(--wine-plum);
+}
+
+.order-info strong {
+	font-size: 1.25rem;
+	color: var(--wine-plum);
+}
+
+/* таблица позиций */
+#orders table {
+	width: 100%;
+	margin: 0;
+	background: rgba(255, 250, 240, .8);
+}
+
+#orders col:nth-child(1) {
+	width: 55%;
+}
+
+#orders tbody td:nth-child(2) {
+	text-align: center;
+}
+
+#orders tbody td:nth-child(3) {
+	text-align: right;
+}
+
+@media (max-width: 600px) {
+	#orders table {
+		display: block;
+		overflow-x: auto;
+	}
+}

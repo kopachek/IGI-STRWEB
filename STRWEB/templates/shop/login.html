@@ -1,9 +1,12 @@
 {% extends 'base.html' %}
+{% load static %}
 {% block title %}Login{% endblock %}
-{% block robots %}<meta name="robots" content="noindex, nofollow">{% endblock %}
+{% block robots %}
+<meta name="robots" content="noindex, nofollow">{% endblock %}
+{% block extra_css %}<link rel="stylesheet" href="{% static 'css/forms.css' %}"><link rel="stylesheet" href="{% static 'css/pages/form_page.css' %}">{% endblock %}
 {% block content %}
 <h2>Login</h2>
-<form method="post">
+<form class="form-card" method="post">
   {% csrf_token %}
   {{ form.as_p }}
   <button type="submit">Login</button>

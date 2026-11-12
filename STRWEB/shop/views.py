@@ -125,7 +125,7 @@ def article_detail(request, pk):
     return render(request, 'shop/article_detail.html', {'article': article})
 
 def faq_list(request):
-    entries = FAQEntry.objects.all()
+    entries = FAQEntry.objects.order_by('-published_at')
     return render(
         request,
         'shop/faq.html',

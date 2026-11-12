@@ -1,0 +1,86 @@
+/* checkout.css — оплата */
+
+.checkout-layout {
+	display: flex;
+	flex-wrap: wrap;
+	align-items: flex-start;
+	gap: 2rem;
+	margin-top: 1.5rem;
+}
+
+/* Заказ */
+.checkout-layout table {
+	flex: 1 1 380px;
+	margin: 0;
+	background: rgba(255, 250, 240, .8);
+}
+
+.checkout-layout tbody td:nth-child(2) {
+	text-align: center;
+}
+
+.checkout-layout tbody td:nth-child(3) {
+	text-align: right;
+	white-space: nowrap;
+}
+
+.checkout-layout tfoot th {
+	text-align: right;
+	text-transform: uppercase;
+	letter-spacing: .08em;
+	background: var(--soft-peach);
+}
+
+.checkout-layout tfoot td {
+	font-size: 1.25rem;
+	text-align: right;
+	background: var(--soft-peach);
+}
+
+/* Форма */
+#checkout-form {
+	flex: 1 1 300px;
+	max-width: 30rem;
+}
+
+#checkout-form fieldset {
+	margin: 0;
+	padding: 1rem 1.3rem 1.3rem;
+	background: rgba(255, 225, 168, .45);
+	border: 1px solid #ecd3a0;
+	border-top: 4px solid var(--vibrant-coral);
+	box-shadow: 0 4px 12px rgba(71, 45, 48, .1);
+}
+
+/* legend с float показывается обычным блоком внутри рамки */
+#checkout-form legend {
+	float: left;
+	width: 100%;
+	margin: 0 0 .8rem;
+	padding: 0 0 .5rem;
+	border-bottom: 1px dashed var(--wine-plum);
+}
+
+#checkout-form legend~* {
+	clear: both;
+}
+
+.error {
+	padding: .5rem .8rem;
+	font-weight: 700;
+	color: #9c2f20;
+	background: #fde4de;
+	border-left: 4px solid #b8473a;
+}
+
+.checkout-actions {
+	display: flex;
+	align-items: center;
+	gap: 1.5rem;
+	margin-bottom: 0;
+}
+
+.checkout-actions button {
+	padding: .6rem 2.5rem;
+	font-size: 1.2rem;
+}

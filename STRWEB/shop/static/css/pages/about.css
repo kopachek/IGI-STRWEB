@@ -1,0 +1,321 @@
+/* about.css — страница «О компании» */
+
+#video,
+#history,
+#requisites,
+#certificate {
+	margin-top: 3.5rem;
+}
+
+/* Логотип: трансформация (rotate + scale) */
+.logo-wrap {
+	margin: 1rem 0 2rem;
+}
+
+#company-logo {
+	height: 100px;
+	width: auto;
+	transform: rotate(-6deg);
+	transition: transform .4s ease;
+}
+
+#company-logo:hover {
+	transform: rotate(0deg) scale(1.15);
+}
+
+/* Текст о компании: красная строка, интервал, буквица */
+.about-text {
+	max-width: 52rem;
+}
+
+.about-text p {
+	margin: 0 0 1rem;
+	text-indent: 1.5em;
+	text-align: justify;
+	line-height: 1.75;
+}
+
+.about-text p:first-child {
+	text-indent: 0;
+}
+
+.about-text p:first-child::first-letter {
+	float: left;
+	padding: .08em .12em 0 0;
+	font-family: "Cormorant Garamond", "Times New Roman", serif;
+	font-size: 3.6em;
+	line-height: .8;
+	color: var(--vibrant-coral);
+}
+
+/* Видео: два блока рядом, на узком экране — друг под другом */
+.media {
+	display: grid;
+	grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+	gap: 1.5rem;
+	margin-top: 1.5rem;
+}
+
+.media figure {
+	margin: 0;
+}
+
+.media iframe,
+.media video {
+	display: block;
+	width: 100%;
+	height: auto;
+	aspect-ratio: 16 / 9;
+	background: #000;
+	border: 1px solid var(--line);
+	box-shadow: 0 6px 18px rgba(71, 45, 48, .15);
+}
+
+.media figcaption {
+	margin-top: .5rem;
+	text-align: center;
+}
+
+/* История по годам: вертикальная линия времени */
+.history {
+	margin: 1.5rem 0 0 .5rem;
+	padding: 0;
+	list-style: none;
+	border-left: 2px solid var(--dry-sage);
+}
+
+.history li {
+	position: relative;
+	margin: 0;
+	padding: 0 0 1.6rem 1.8rem;
+}
+
+.history li::before {
+	content: "";
+	position: absolute;
+	top: .5rem;
+	left: -9px;
+	width: 16px;
+	height: 16px;
+	background: var(--paper);
+	border: 2px solid var(--vibrant-coral);
+	border-radius: 50%;
+}
+
+.history li:first-child::before,
+.history li:last-child::before {
+	background: var(--vibrant-coral);
+}
+
+.history li:last-child {
+	padding-bottom: 0;
+}
+
+.history .year {
+	display: block;
+	font-size: 1.4rem;
+	font-weight: 700;
+	line-height: 1.2;
+	color: var(--wine-plum);
+}
+
+/* Реквизиты: выделены моноширинным шрифтом */
+#requisites address {
+	max-width: 38rem;
+	margin-top: 1rem;
+	padding: 1.2rem 1.5rem;
+	font-family: "Courier New", Courier, monospace;
+	background: rgba(255, 225, 168, .35);
+	border: 1px solid var(--line);
+	border-left: 4px solid var(--wine-plum);
+}
+
+#requisites dl {
+	display: grid;
+	grid-template-columns: max-content 1fr;
+	gap: .5rem 1.5rem;
+	margin: 0;
+}
+
+#requisites dt,
+#requisites dd {
+	margin: 0;
+}
+
+#requisites dt {
+	font-variant: small-caps;
+	letter-spacing: .05em;
+}
+
+/* Сертификат: рамка из графического файла, фон-изображение + градиент, z-index */
+.certificate {
+	position: relative;
+	max-width: 640px;
+	margin: 1.5rem 0 0;
+	padding: 2.2rem 1.8rem 2rem;
+	text-align: center;
+	color: var(--deep-mocha);
+	/* запасная рамка, если картинка не загрузится */
+	border-width: 40px;
+	border-style: solid;
+	border-color: var(--wine-plum);
+	/* рамка из изображения: вендорные префиксы + стандартное свойство */
+	-webkit-border-image: url("../../img/certificate-border.svg") 40 round;
+	-moz-border-image: url("../../img/certificate-border.svg") 40 round;
+	-o-border-image: url("../../img/certificate-border.svg") 40 round;
+	border-image: url("../../img/certificate-border.svg") 40 round;
+	/* фоновое изображение (водяной знак) поверх градиента */
+	background:
+		url("../../img/certificate-bg.svg") center / 60% no-repeat,
+		linear-gradient(160deg, var(--paper) 0%, var(--soft-peach) 100%);
+	background-origin: border-box;
+	box-shadow: 0 8px 24px rgba(71, 45, 48, .2);
+}
+
+/* весь текст над фоном, печать — над текстом */
+.certificate>*:not(.cert-seal) {
+	position: relative;
+	z-index: 1;
+}
+
+.certificate p {
+	margin: 0;
+}
+
+.cert-register {
+	font-size: .95rem;
+	font-variant: small-caps;
+	letter-spacing: .12em;
+}
+
+.certificate h4 {
+	margin: .4rem 0 0;
+	font-family: "Cormorant Garamond", "Times New Roman", serif;
+	font-size: 3.2rem;
+	line-height: 1.1;
+	letter-spacing: .2em;
+	text-transform: uppercase;
+	color: var(--wine-plum);
+}
+
+.cert-subtitle {
+	font-style: italic;
+}
+
+/* линия-разделитель с градиентом */
+.certificate header::after {
+	content: "";
+	display: block;
+	width: 60%;
+	height: 2px;
+	margin: 1.2rem auto 1.5rem;
+	background: linear-gradient(90deg, transparent, var(--vibrant-coral), transparent);
+}
+
+.cert-holder {
+	margin: .3rem 0;
+	font-family: "Cormorant Garamond", "Times New Roman", serif;
+	font-size: 2.1rem;
+	font-weight: 700;
+	line-height: 1.2;
+	color: var(--wine-plum);
+}
+
+.cert-number {
+	margin-top: 1rem;
+	font-variant: small-caps;
+	letter-spacing: .08em;
+}
+
+.cert-number strong {
+	font-size: 1.3rem;
+	text-decoration: underline;
+}
+
+.certificate footer {
+	display: flex;
+	align-items: flex-end;
+	justify-content: space-between;
+	gap: 1rem;
+	margin-top: 2.5rem;
+	text-align: left;
+}
+
+.certificate footer p {
+	display: flex;
+	flex-direction: column;
+}
+
+.certificate small {
+	font-size: .85rem;
+	font-variant: small-caps;
+	letter-spacing: .05em;
+}
+
+.signature {
+	min-width: 9rem;
+	border-bottom: 1px solid var(--deep-mocha);
+	font-family: "Cormorant Garamond", "Times New Roman", serif;
+	font-size: 1.8rem;
+	font-style: italic;
+	line-height: 1.2;
+}
+
+/* печать поверх подписи */
+.cert-seal {
+	position: absolute;
+	z-index: 2;
+	right: 4rem;
+	bottom: 3.5rem;
+	display: flex;
+	align-items: center;
+	justify-content: center;
+	width: 7rem;
+	height: 7rem;
+	padding: .5rem;
+	font-size: .75rem;
+	line-height: 1.3;
+	font-variant: small-caps;
+	letter-spacing: .06em;
+	color: var(--vibrant-coral);
+	background: rgba(255, 250, 240, .35);
+	border: 3px double var(--vibrant-coral);
+	border-radius: 50%;
+	opacity: .85;
+	transform: rotate(-14deg);
+}
+
+@media (max-width: 480px) {
+	.certificate {
+		padding: 1.2rem .8rem;
+		border-width: 24px;
+	}
+
+	.certificate h4 {
+		font-size: 2.1rem;
+		letter-spacing: .1em;
+	}
+
+	.cert-holder {
+		font-size: 1.5rem;
+	}
+
+	.cert-seal {
+		right: 1.5rem;
+		bottom: 3rem;
+		width: 5rem;
+		height: 5rem;
+		font-size: .6rem;
+	}
+}
+
+@media (max-width: 480px) {
+	#requisites dl {
+		grid-template-columns: 1fr;
+		gap: 0;
+	}
+
+	#requisites dd {
+		margin-bottom: .6rem;
+	}
+}

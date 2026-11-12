@@ -1,8 +1,14 @@
 {% extends 'base.html' %}
+{% load static %}
 {% block title %}Cart{% endblock %}
 
-{% block meta_description %}<meta name="description" content="Your shopping cart: selected products, quantities and the total amount of the order.">{% endblock %}
-{% block meta_keywords %}<meta name="keywords" content="cart, order, payment, confectionery">{% endblock %}
+{% block meta_description %}
+<meta name="description" content="Your shopping cart: selected products, quantities and the total amount of the order.">
+{% endblock %}
+{% block meta_keywords %}
+<meta name="keywords" content="cart, order, payment, confectionery">{% endblock %}
+
+{% block extra_css %}<link rel="stylesheet" href="{% static 'css/pages/cart.css' %}">{% endblock %}
 
 {% block content %}
 <h2>Cart</h2>
@@ -23,20 +29,20 @@
 				<th id="h-price" scope="col">Price (<abbr title="Belarusian ruble">BYN</abbr>)</th>
 				<th id="h-qty" scope="col">Quantity</th>
 				<th id="h-sum" scope="col">Sum (<abbr title="Belarusian ruble">BYN</abbr>)</th>
-				<th id="h-action" scope="col" title="Actions"></th>
+				<th id="h-action" scope="col" title="Actions">Actions</th>
 			</tr>
 		</thead>
 		<tbody>
 			{% for it in items %}
 			<tr id="cart-item-{{ it.product.pk }}">
 				<td headers="h-product"><a href="{% url 'product_detail' pk=it.product.pk %}" title="Product details">{{ it.product.name }}</a></td>
-				<td headers="h-price">{{ it.product.price }}</td>
+				<td headers="h-price">{{ it.product.price|floatformat:2 }}</td>
 				<td headers="h-qty">
-					<form method="post" action="{% url 'cart_change' pk=it.product.pk action='dec' %}" style="display:inline">{% csrf_token %}<button type="submit" title="Decrease">−</button></form>
+					<form class="qty-form" method="post" action="{% url 'cart_change' pk=it.product.pk action='dec' %}">{% csrf_token %}<button type="submit" title="Decrease">−</button></form>
 					<data value="{{ it.quantity|floatformat:'-3' }}">{{ it.quantity|floatformat:"-3" }} {{ it.product.get_unit_display }}</data>
-					<form method="post" action="{% url 'cart_change' pk=it.product.pk action='inc' %}" style="display:inline">{% csrf_token %}<button type="submit" title="Increase">+</button></form>
+					<form class="qty-form" method="post" action="{% url 'cart_change' pk=it.product.pk action='inc' %}">{% csrf_token %}<button type="submit" title="Increase">+</button></form>
 				</td>
-				<td headers="h-sum">{{ it.line_total }}</td>
+				<td headers="h-sum">{{ it.line_total|floatformat:2 }}</td>
 				<td headers="h-action">
 					<form method="post" action="{% url 'cart_remove' pk=it.product.pk %}">{% csrf_token %}<button type="submit" title="Remove from cart">✕ Remove</button></form>
 				</td>
@@ -46,11 +52,11 @@
 		<tfoot>
 			<tr>
 				<th id="h-total" scope="row" colspan="3">Total</th>
-				<td headers="h-total" colspan="2"><strong><data value="{{ total }}">{{ total }}</data> <abbr title="Belarusian ruble">BYN</abbr></strong></td>
+				<td headers="h-total" colspan="2"><strong><data value="{{ total|floatformat:'2u' }}">{{ total|floatformat:2 }}</data> <abbr title="Belarusian ruble">BYN</abbr></strong></td>
 			</tr>
 		</tfoot>
 	</table>
-	<form method="get" action="{% url 'checkout' %}">
+	<form class="cart-pay" method="get" action="{% url 'checkout' %}">
 		<button type="submit" accesskey="y" title="Proceed to payment">Pay</button>
 	</form>
 	{% else %}

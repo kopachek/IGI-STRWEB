@@ -1,16 +1,25 @@
 {% extends 'base.html' %}
+{% load static %}
 {% block title %}Promos{% endblock %}
 
-{% block meta_description %}<meta name="description" content="Active promo codes and discounts of our confectionery shop.">{% endblock %}
-{% block meta_keywords %}<meta name="keywords" content="promo codes, discounts, promotions, confectionery">{% endblock %}
+{% block meta_description %}
+<meta name="description" content="Active promo codes and discounts of our confectionery shop.">{% endblock %}
+{% block meta_keywords %}
+<meta name="keywords" content="promo codes, discounts, promotions, confectionery">{% endblock %}
+
+{% block extra_css %}<link rel="stylesheet" href="{% static 'css/pages/promos.css' %}">{% endblock %}
 
 {% block content %}
 <h2>Promo codes</h2>
 
+{% if user.is_staff %}
+<p><a class="btn" href="{% url 'promo_create' %}" accesskey="a" title="Add a new promo code">Add promocode</a></p>
+{% endif %}
+
 <section id="active-promos">
 	<h3>Active promos</h3>
 	{% if active_promos %}
-	<table>
+	<table class="promo-table">
 		<caption>Active promo codes and their discounts</caption>
 		<colgroup>
 			<col>
@@ -41,12 +50,8 @@
 
 <section id="archived-promos">
 	<h3>Archive</h3>
-	<ul>
+	<ul class="promo-archive">
 		{% for p in archived_promos %}<li><s><code>{{ p.code }}</code></s></li>{% empty %}<li>None</li>{% endfor %}
 	</ul>
 </section>
-
-{% if user.is_staff %}
-<p><a href="{% url 'promo_create' %}" accesskey="a" title="Add a new promo code">Add promocode</a></p>
-{% endif %}
 {% endblock %}

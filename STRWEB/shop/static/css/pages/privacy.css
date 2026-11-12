@@ -1,0 +1,133 @@
+/* privacy.css — политика конфиденциальности */
+
+#privacy-policy {
+	max-width: 54rem;
+}
+
+#privacy-policy time {
+	font-variant: small-caps;
+	font-weight: 700;
+}
+
+#privacy-policy mark {
+	background: var(--soft-peach);
+}
+
+#privacy-policy blockquote footer {
+	text-align: right;
+}
+
+/* Содержание */
+#privacy-policy>nav li:first-child {
+	font-weight: 700;
+}
+
+#privacy-policy hr {
+	margin: 2rem 0;
+	border: 0;
+	border-top: 1px dashed var(--wine-plum);
+}
+
+/* Термины */
+#terms dl {
+	display: grid;
+	grid-template-columns: max-content 1fr;
+	gap: .5rem 1.5rem;
+}
+
+#terms dt,
+#terms dd {
+	margin: 0;
+}
+
+#terms dfn {
+	font-style: normal;
+	font-weight: 700;
+	font-variant: small-caps;
+	color: var(--wine-plum);
+}
+
+/* Таблица */
+#data table {
+	width: 100%;
+	margin: 0;
+}
+
+#data tbody th[scope="row"] {
+	background: rgba(201, 203, 163, .4);
+}
+
+#data tfoot td {
+	text-align: center;
+	font-style: italic;
+	background: var(--soft-peach);
+}
+
+/* Cookies */
+#cookies code {
+	padding: .1rem .7rem;
+	font-family: "Courier New", Courier, monospace;
+	font-weight: 700;
+	background: var(--paper);
+	border: 2px dashed var(--vibrant-coral);
+}
+
+#cookies details {
+	background: rgba(255, 225, 168, .3);
+	border: 1px solid #ecd3a0;
+	border-left: 4px solid var(--dry-sage);
+}
+
+#cookies details[open] {
+	border-left-color: var(--vibrant-coral);
+}
+
+#cookies summary {
+	padding: .6rem 1rem;
+	font-weight: 700;
+	color: var(--wine-plum);
+	cursor: pointer;
+}
+
+#cookies details p {
+	margin: 0;
+	padding: 0 1rem .8rem;
+}
+
+/* Права: маркеры-символы юникода */
+#rights ol {
+	padding: 0;
+	list-style: none;
+}
+
+#rights li::before {
+	content: "\2726\00A0";
+	color: var(--vibrant-coral);
+}
+
+/* Подвал: кнопка по центру */
+.policy-footer {
+	margin-top: 2rem;
+	padding-top: 1rem;
+	border-top: 1px solid var(--line);
+	text-align: center;
+}
+
+.policy-footer p {
+	margin: 0;
+}
+
+.policy-footer a::before {
+	content: "\2191\00A0";
+}
+
+@media (max-width: 600px) {
+	#terms dl {
+		grid-template-columns: 1fr;
+	}
+
+	#data table {
+		display: block;
+		overflow-x: auto;
+	}
+}

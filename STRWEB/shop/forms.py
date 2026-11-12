@@ -116,6 +116,10 @@ class ProductCRUDForm(forms.ModelForm):
     class Meta:
         model = Product
         fields = ('name', 'price', 'unit', 'category', 'manufacturer', 'description', 'is_available', 'image')
+    def __init__(self, *args, **kwargs):
+        super().__init__(*args, **kwargs)
+        self.fields["category"].empty_label = None
+        self.fields["manufacturer"].empty_label = None
 
 class ArticleCRUDForm(forms.ModelForm):
     class Meta:

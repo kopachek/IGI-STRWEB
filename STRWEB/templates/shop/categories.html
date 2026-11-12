@@ -1,28 +1,19 @@
 {% extends 'base.html' %}
-{% load images %}
+{% load static images %}
 {% block title %}Categories{% endblock %}
 
-{% block meta_description %}<meta name="description" content="Product categories of our confectionery shop: cakes, pastries, chocolate, candies and more.">{% endblock %}
-{% block meta_keywords %}<meta name="keywords" content="categories, product types, cakes, candies, chocolate, confectionery">{% endblock %}
+{% block meta_description %}
+<meta name="description" content="Product categories of our confectionery shop: cakes, pastries, chocolate, candies and more.">{% endblock %}
+{% block meta_keywords %}
+<meta name="keywords" content="categories, product types, cakes, candies, chocolate, confectionery">{% endblock %}
+
+{% block extra_css %}<link rel="stylesheet" href="{% static 'css/pages/categories.css' %}">{% endblock %}
 
 {% block content %}
-<style>
-.category-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(200px, 1fr)); gap: 16px; margin-top: 16px; }
-.category-card { border: 1px solid #ccc; padding: 8px; }
-.category-card figure { margin: 0; }
-.category-card .thumb {
-	display: block;
-	width: 100%;
-	aspect-ratio: 1 / 1;
-	object-fit: cover;
-	object-position: center;
-	background: #f2f2f2;
-}
-</style>
 <h2>Product categories</h2>
 
 {% if user.is_staff %}
-<p><a href="{% url 'category_create' %}" accesskey="a" title="Add a new category">Add category</a></p>
+<p><a class="btn" href="{% url 'category_create' %}" accesskey="a" title="Add a new category">Add category</a></p>
 {% endif %}
 
 <section id="categories" class="category-grid" itemscope itemtype="https://schema.org/ItemList">
@@ -35,13 +26,15 @@
 				{% else %}
 				<div class="thumb"></div>
 				{% endif %}
-				<figcaption><h3 itemprop="name" style="margin:8px 0 4px">{{ c.name }}</h3></figcaption>
+				<figcaption>
+					<h3 itemprop="name">{{ c.name }}</h3>
+				</figcaption>
 			</figure>
 		</a>
-		{% if c.description %}<p itemprop="description">{{ c.description }}</p>{% endif %}
+		{% if c.description %}<p class="category-description" itemprop="description">{{ c.description }}</p>{% endif %}
 		{% if user.is_staff %}
-		<nav>
-			<a href="{% url 'category_edit' pk=c.pk %}" title="Edit category">Edit</a> |
+		<nav class="category-actions">
+			<a href="{% url 'category_edit' pk=c.pk %}" title="Edit category">Edit</a>
 			<a href="{% url 'category_delete' pk=c.pk %}" title="Delete category">Delete</a>
 		</nav>
 		{% endif %}

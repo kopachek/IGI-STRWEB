@@ -1,0 +1,75 @@
+/* employee_dashboard.css — кабинет сотрудника */
+
+#clients,
+#orders {
+	margin-top: 2.5rem;
+}
+
+/* Клиенты: карточки в сетке */
+.client-list {
+	display: grid;
+	grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+	gap: 1.2rem;
+	margin: 0;
+	padding: 0;
+	list-style: none;
+}
+
+.client-list li {
+	display: flex;
+	flex-direction: column;
+	gap: .2rem;
+	padding: .8rem 1.1rem;
+	background: #fffdf7;
+	border: 1px solid var(--line);
+	border-top: 4px solid var(--wine-plum);
+	box-shadow: 0 4px 12px rgba(71, 45, 48, .1);
+}
+
+.client-list li:nth-child(even) {
+	border-top-color: var(--dry-sage);
+}
+
+.client-name {
+	font-family: "Cormorant Garamond", "Times New Roman", serif;
+	font-size: 1.4rem;
+	line-height: 1.2;
+	color: var(--wine-plum);
+}
+
+.client-list a {
+	overflow-wrap: anywhere;
+}
+
+/* Заказы */
+#orders table {
+	width: 100%;
+	max-width: 62rem;
+	margin: 1.5rem 0 0;
+	background: rgba(255, 250, 240, .8);
+}
+
+#orders col:nth-child(1) {
+	width: 14%;
+}
+
+#orders tbody td:nth-child(1),
+#orders tbody td:nth-child(3) {
+	text-align: center;
+}
+
+#orders tbody td:nth-child(4) {
+	text-align: right;
+	white-space: nowrap;
+}
+
+#orders td strong {
+	color: var(--wine-plum);
+}
+
+@media (max-width: 600px) {
+	#orders table {
+		display: block;
+		overflow-x: auto;
+	}
+}

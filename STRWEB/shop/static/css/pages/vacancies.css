@@ -1,0 +1,69 @@
+/* vacancies.css — вакансии: плавающие блоки (float, clear) */
+
+.vacancy-list {
+	margin: 1.5rem 0 0;
+	padding: 0;
+	list-style: none;
+}
+
+/* clearfix: список «охватывает» плавающие карточки */
+.vacancy-list::after {
+	content: "";
+	display: block;
+	clear: both;
+}
+
+.vacancy-card {
+	float: left;
+	width: calc(50% - .75rem);
+	margin: 0 0 1.5rem;
+	padding: 1rem 1.3rem;
+	background: rgba(255, 225, 168, .45);
+	border: 1px solid #ecd3a0;
+	border-top: 4px solid var(--vibrant-coral);
+	box-shadow: 0 4px 12px rgba(71, 45, 48, .1);
+}
+
+/* нечётная карточка начинает новый ряд (clear), чётная плавает справа */
+.vacancy-card:nth-child(odd) {
+	clear: both;
+}
+
+.vacancy-card:nth-child(even) {
+	float: right;
+	background: rgba(201, 203, 163, .4);
+	border-color: var(--dry-sage);
+	border-top-color: var(--wine-plum);
+}
+
+.vacancy-card h3 {
+	margin: 0 0 .6rem;
+	font-size: 1.65rem;
+}
+
+.vacancy-card h3 a:link,
+.vacancy-card h3 a:visited {
+	color: var(--wine-plum);
+}
+
+.vacancy-description p {
+	margin: 0 0 .7rem;
+	line-height: 1.65;
+}
+
+.vacancy-description p:last-child {
+	margin-bottom: 0;
+}
+
+.vacancy-empty {
+	clear: both;
+}
+
+@media (max-width: 700px) {
+
+	.vacancy-card,
+	.vacancy-card:nth-child(even) {
+		float: none;
+		width: auto;
+	}
+}

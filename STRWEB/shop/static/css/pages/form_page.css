@@ -1,0 +1,89 @@
+/* form_page.css — страницы с формами: login, register, review, crud, удаление.
+   Подключается после forms.css. Стилизует HTML, который выдаёт form.as_p. */
+
+.form-card {
+	max-width: 30rem;
+	margin-top: 1.5rem;
+	padding: 1.3rem 1.5rem;
+	background: rgba(255, 225, 168, .45);
+	border: 1px solid #ecd3a0;
+	border-top: 4px solid var(--vibrant-coral);
+	box-shadow: 0 4px 12px rgba(71, 45, 48, .1);
+}
+
+.form-card input,
+.form-card select,
+.form-card textarea {
+	max-width: none;
+}
+
+.form-card textarea {
+	min-height: 8rem;
+	resize: vertical;
+}
+
+/* текущий файл: без переносов с дефисом */
+.form-card p {
+	hyphens: none;
+	overflow-wrap: anywhere;
+}
+
+/* флажок очистки файла вплотную к своей подписи */
+.form-card input[id$="-clear_id"] {
+	margin: 0 .3rem 0 .8rem;
+}
+
+.form-card label[for$="-clear_id"] {
+	display: inline;
+	font-weight: 400;
+	color: var(--deep-mocha);
+}
+
+/* подсказки к полям (help_text) */
+.helptext {
+	display: block;
+	margin-top: .3rem;
+	font-size: .9rem;
+	line-height: 1.4;
+	color: var(--wine-plum);
+}
+
+.helptext ul {
+	margin: .3rem 0 0;
+	padding-left: 1.2rem;
+}
+
+/* ошибки полей и формы */
+.errorlist {
+	margin: 0 0 .5rem;
+	padding: .4rem .8rem;
+	list-style: none;
+	font-weight: 700;
+	color: #9c2f20;
+	background: #fde4de;
+	border-left: 4px solid #b8473a;
+}
+
+.form-card>button {
+	margin-top: .3rem;
+	padding: .6rem 2rem;
+}
+
+/* кнопки удаления */
+.btn-danger {
+	color: #9c2f20;
+	background: transparent;
+	border-color: #9c2f20;
+}
+
+.btn-danger:hover {
+	color: var(--paper);
+	background: #9c2f20;
+	border-color: #9c2f20;
+}
+
+.form-delete {
+	max-width: 30rem;
+	margin-top: 1rem;
+	text-align: right;
+}

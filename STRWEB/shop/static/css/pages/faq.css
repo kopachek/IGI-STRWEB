@@ -1,0 +1,106 @@
+/* faq.css — вопросы и ответы (раскрывающиеся блоки) */
+
+.faq-container {
+	max-width: 62rem;
+	margin-top: 1.5rem;
+}
+
+.faq-item {
+	margin: 0 0 1rem;
+}
+
+.faq-item details {
+	background: rgba(255, 225, 168, .3);
+	border: 1px solid #ecd3a0;
+	border-left: 4px solid var(--dry-sage);
+	transition: background-color .25s, border-color .25s;
+}
+
+/* раскрытый вопрос: атрибут [open] */
+.faq-item details[open] {
+	background: rgba(255, 225, 168, .55);
+	border-left-color: var(--vibrant-coral);
+}
+
+.faq-item summary {
+	display: flex;
+	align-items: center;
+	justify-content: space-between;
+	gap: 1rem;
+	padding: 1rem 1.2rem;
+	font-family: "Cormorant Garamond", "Times New Roman", serif;
+	font-size: 1.4rem;
+	font-weight: 700;
+	line-height: 1.25;
+	color: var(--wine-plum);
+	cursor: pointer;
+	list-style: none;
+}
+
+.faq-item summary::-webkit-details-marker {
+	display: none;
+}
+
+.faq-item summary:hover {
+	color: var(--vibrant-coral);
+}
+
+.faq-item summary:focus-visible {
+	outline: 2px solid var(--vibrant-coral);
+	outline-offset: -4px;
+}
+
+/* кружок с «+» / «−» вместо стандартного треугольника */
+.faq-item summary::after {
+	content: "+";
+	flex: 0 0 auto;
+	width: 1.9rem;
+	height: 1.9rem;
+	font-family: "Times New Roman", Tinos, serif;
+	font-size: 1.5rem;
+	line-height: 1.8rem;
+	text-align: center;
+	color: var(--paper);
+	background: var(--wine-plum);
+	border-radius: 50%;
+	transition: background-color .25s;
+}
+
+.faq-item details[open] summary::after {
+	content: "\2212";
+	background: var(--vibrant-coral);
+}
+
+.faq-item summary a:link,
+.faq-item summary a:visited {
+	color: inherit;
+}
+
+/* ответ */
+.faq-answer {
+	margin: 0 1.2rem;
+	padding: 1rem 0 .3rem;
+	border-top: 1px dashed var(--dry-sage);
+}
+
+.faq-answer p {
+	margin: 0 0 .8rem;
+	line-height: 1.7;
+}
+
+.faq-answer .faq-date {
+	margin: .2rem 0 .8rem;
+	font-variant: small-caps;
+	letter-spacing: .04em;
+}
+
+@media (max-width: 600px) {
+	.faq-item summary {
+		font-size: 1.2rem;
+		padding: .8rem 1rem;
+	}
+
+	.faq-answer {
+		margin: 0 1rem;
+	}
+}

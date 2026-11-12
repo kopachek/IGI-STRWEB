@@ -1,0 +1,119 @@
+/* product_detail.css — страница товара */
+
+.product-detail {
+	display: flex;
+	flex-wrap: wrap;
+	align-items: flex-start;
+	gap: 2.5rem;
+}
+
+.product-detail figure {
+	flex: 0 1 380px;
+	width: 100%;
+	max-width: 380px;
+	margin: 0;
+}
+
+.product-detail .thumb {
+	display: block;
+	width: 100%;
+	aspect-ratio: 1 / 1;
+	object-fit: cover;
+	object-position: center;
+	background: rgba(71, 45, 48, .08);
+	border: 3px solid var(--paper);
+	box-shadow: 0 6px 18px rgba(71, 45, 48, .2);
+}
+
+.product-detail .info {
+	flex: 1 1 300px;
+	min-width: 0;
+}
+
+.product-detail .info h2 {
+	margin-top: 0;
+}
+
+.product-detail .price {
+	margin: .5rem 0 1.4rem;
+}
+
+.product-detail .price strong {
+	font-size: 2rem;
+	font-weight: 700;
+	color: var(--wine-plum);
+}
+
+.product-detail .unit {
+	font-size: 1.2rem;
+}
+
+/* Характеристики */
+.product-detail dl {
+	display: grid;
+	grid-template-columns: max-content 1fr;
+	gap: .4rem 1.5rem;
+	margin: 0 0 1.2rem;
+	padding: .8rem 0;
+	border-top: 1px solid var(--line);
+	border-bottom: 1px solid var(--line);
+}
+
+.product-detail dt,
+.product-detail dd {
+	margin: 0;
+}
+
+.product-detail dt {
+	color: var(--wine-plum);
+}
+
+.product-description {
+	max-width: 40rem;
+	line-height: 1.7;
+}
+
+/* «Нет в наличии» */
+.product-detail mark {
+	display: inline-block;
+	padding: .3rem .9rem;
+	font-weight: 700;
+	background: var(--soft-peach);
+	border-left: 4px solid var(--vibrant-coral);
+}
+
+/* Форма добавления в корзину: карточка, заголовок внутри неё */
+#add-to-cart fieldset {
+	max-width: 28rem;
+	margin: 1.2rem 0 0;
+	padding: 1rem 1.3rem 1.3rem;
+	background: rgba(255, 225, 168, .45);
+	border: 1px solid #ecd3a0;
+	border-top: 4px solid var(--vibrant-coral);
+	box-shadow: 0 4px 12px rgba(71, 45, 48, .1);
+}
+
+/* legend с float показывается обычным блоком внутри рамки, а не на линии */
+#add-to-cart legend {
+	float: left;
+	width: 100%;
+	margin: 0 0 .8rem;
+	padding: 0 0 .5rem;
+	border-bottom: 1px dashed var(--wine-plum);
+}
+
+#add-to-cart legend~p {
+	clear: both;
+}
+
+#add-to-cart #quantity {
+	width: 8rem;
+}
+
+#add-to-cart button {
+	margin-top: .3rem;
+}
+
+.back-link {
+	margin-top: 1.5rem;
+}

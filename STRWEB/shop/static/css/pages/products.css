@@ -1,0 +1,180 @@
+/* products.css — каталог товаров (CSS Grid) */
+
+/* Форма фильтра */
+#product-filter {
+	display: grid;
+	grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+	gap: .5rem 1.5rem;
+	align-items: end;
+	margin: 1.5rem 0 0;
+	padding: 1.2rem 1.5rem;
+	background: rgba(255, 225, 168, .3);
+	border: 1px solid #ecd3a0;
+	border-left: 4px solid var(--vibrant-coral);
+}
+
+#product-filter p {
+	margin: 0;
+}
+
+#product-filter input,
+#product-filter select {
+	max-width: none;
+}
+
+#product-filter button {
+	justify-self: start;
+}
+
+/* Каталог: сетка карточек */
+.product-grid {
+	display: grid;
+	grid-template-columns: repeat(auto-fill, minmax(240px, 1fr));
+	gap: 1.5rem;
+	margin-top: 2rem;
+}
+
+.product-card {
+	display: flex;
+	flex-direction: column;
+	padding: .8rem;
+	background: rgba(255, 225, 168, .45);
+	border: 1px solid #ecd3a0;
+	border-top: 4px solid var(--vibrant-coral);
+	box-shadow: 0 4px 12px rgba(71, 45, 48, .1);
+	transition: transform .25s, box-shadow .25s;
+}
+
+.product-card:nth-child(even) {
+	background: rgba(201, 203, 163, .4);
+	border-color: var(--dry-sage);
+	border-top-color: var(--wine-plum);
+}
+
+.product-card:hover {
+	transform: translateY(-3px);
+	box-shadow: 0 10px 22px rgba(71, 45, 48, .2);
+}
+
+/* недоступный товар: комбинация классов */
+.product-card.unavailable {
+	opacity: .65;
+}
+
+.product-card.unavailable .thumb {
+	filter: grayscale(1);
+}
+
+.product-card figure {
+	margin: 0;
+}
+
+.product-card .thumb {
+	display: block;
+	width: 100%;
+	aspect-ratio: 1 / 1;
+	object-fit: cover;
+	object-position: center;
+	background: rgba(71, 45, 48, .08);
+	border: 3px solid var(--paper);
+	box-shadow: 0 2px 8px rgba(71, 45, 48, .2);
+}
+
+.product-card figcaption {
+	font-style: normal;
+}
+
+.product-card h3 {
+	margin: .8rem 0 .4rem;
+	font-size: 1.5rem;
+	text-align: center;
+}
+
+.product-card>a {
+	text-decoration: none;
+}
+
+.product-card>a:link,
+.product-card>a:visited {
+	color: var(--wine-plum);
+}
+
+.product-card>a:hover {
+	color: var(--vibrant-coral);
+}
+
+.product-category {
+	align-self: center;
+	margin-bottom: .5rem;
+	padding: .15rem .9rem;
+	font-size: .95rem;
+	color: var(--soft-peach);
+	background: var(--wine-plum);
+	border: 1px solid var(--wine-plum);
+}
+
+.product-brand {
+	display: flex;
+	align-items: center;
+	justify-content: center;
+	gap: .4rem;
+	margin-bottom: .5rem;
+}
+
+.product-brand img {
+	display: block;
+	flex: none;
+	width: 30px;
+	height: 30px;
+	object-fit: cover;
+	object-position: center;
+	background: #fff;
+	border: 2px solid var(--wine-plum);
+	border-radius: 50%;
+}
+
+.product-brand small {
+	font-size: 1rem;
+	color: var(--deep-mocha);
+}
+
+.product-price {
+	margin-top: auto;
+	padding-top: .6rem;
+	text-align: center;
+}
+
+.product-price strong {
+	font-size: 1.5rem;
+	font-weight: 700;
+	color: var(--wine-plum);
+}
+
+.product-unavailable {
+	margin-top: .5rem;
+	padding: .15rem;
+	text-align: center;
+	font-weight: 700;
+	color: var(--soft-peach);
+	background: var(--wine-plum);
+}
+
+.product-actions {
+	display: flex;
+	justify-content: center;
+	gap: 1.5rem;
+	margin-top: .8rem;
+	padding-top: .6rem;
+	border-top: 1px dashed var(--wine-plum);
+}
+
+@media (max-width: 480px) {
+	.product-grid {
+		grid-template-columns: 1fr 1fr;
+		gap: 1rem;
+	}
+
+	.product-card h3 {
+		font-size: 1.25rem;
+	}
+}

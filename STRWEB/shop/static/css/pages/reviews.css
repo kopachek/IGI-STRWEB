@@ -1,0 +1,107 @@
+/* reviews.css — список отзывов */
+
+.review-add {
+	margin: 1.2rem 0 0;
+}
+
+.review-add .note {
+	margin-left: .5rem;
+	font-size: 1rem;
+	color: var(--wine-plum);
+}
+
+.review-list {
+	display: grid;
+	grid-template-columns: repeat(auto-fill, minmax(420px, 1fr));
+	gap: 1.5rem;
+	align-items: start;
+	margin: 1.5rem 0 0;
+	padding: 0;
+	list-style: none;
+}
+
+.review-card {
+	margin: 0;
+	padding: 1rem 1.3rem;
+	background: rgba(255, 225, 168, .45);
+	border: 1px solid #ecd3a0;
+	border-top: 4px solid var(--vibrant-coral);
+	box-shadow: 0 4px 12px rgba(71, 45, 48, .1);
+}
+
+.review-list li:nth-child(even) {
+	background: rgba(201, 203, 163, .4);
+	border-color: var(--dry-sage);
+	border-top-color: var(--wine-plum);
+}
+
+.review-card header {
+	display: flex;
+	flex-wrap: wrap;
+	align-items: baseline;
+	justify-content: space-between;
+	gap: .3rem 1rem;
+}
+
+.review-author {
+	font-family: "Cormorant Garamond", "Times New Roman", serif;
+	font-size: 1.5rem;
+	line-height: 1.2;
+	color: var(--wine-plum);
+}
+
+.review-rating {
+	white-space: nowrap;
+}
+
+.stars {
+	font-size: 1.4rem;
+	letter-spacing: 2px;
+	color: var(--vibrant-coral);
+}
+
+.score {
+	margin-left: .4rem;
+	font-weight: 700;
+	color: var(--deep-mocha);
+}
+
+/* текст отзыва: перекрываем общий стиль blockquote из base.css */
+.review-card blockquote {
+	margin: .9rem 0;
+	padding: 0 0 0 1rem;
+	font-size: 1.1rem;
+	font-style: normal;
+	background: none;
+	border-left: 3px solid var(--vibrant-coral);
+}
+
+.review-card footer {
+	display: flex;
+	align-items: baseline;
+	justify-content: space-between;
+	gap: 1rem;
+	padding-top: .6rem;
+	border-top: 1px dashed var(--wine-plum);
+}
+
+.review-card time {
+	font-weight: 700;
+	font-variant: small-caps;
+	letter-spacing: .04em;
+	color: var(--wine-plum);
+}
+
+.review-actions a {
+	margin-left: 1rem;
+}
+
+.review-empty {
+	grid-column: 1 / -1;
+}
+
+@media (max-width: 600px) {
+	.review-list {
+		grid-template-columns: 1fr;
+	}
+}

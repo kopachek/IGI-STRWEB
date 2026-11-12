@@ -1,0 +1,100 @@
+/* categories.css — категории товаров */
+
+.category-grid {
+	display: grid;
+	grid-template-columns: repeat(auto-fill, minmax(230px, 1fr));
+	gap: 1.5rem;
+	margin-top: 1.5rem;
+}
+
+.category-card {
+	display: flex;
+	flex-direction: column;
+	padding: .8rem;
+	background: rgba(255, 225, 168, .45);
+	border: 1px solid #ecd3a0;
+	border-top: 4px solid var(--vibrant-coral);
+	box-shadow: 0 4px 12px rgba(71, 45, 48, .1);
+	transition: transform .25s, box-shadow .25s;
+}
+
+.category-card:nth-child(even) {
+	background: rgba(201, 203, 163, .4);
+	border-color: var(--dry-sage);
+	border-top-color: var(--wine-plum);
+}
+
+.category-card:hover {
+	transform: translateY(-3px);
+	box-shadow: 0 10px 22px rgba(71, 45, 48, .2);
+}
+
+.category-card figure {
+	margin: 0;
+}
+
+/* квадратная картинка */
+.category-card .thumb {
+	display: block;
+	width: 100%;
+	aspect-ratio: 1 / 1;
+	object-fit: cover;
+	object-position: center;
+	background: rgba(71, 45, 48, .08);
+	border: 3px solid var(--paper);
+	box-shadow: 0 2px 8px rgba(71, 45, 48, .2);
+}
+
+.category-card figcaption {
+	font-style: normal;
+}
+
+.category-card h3 {
+	margin: .8rem 0 .8rem;
+	font-size: 1.6rem;
+	text-align: center;
+}
+
+/* ссылка-карточка: название не должно «выцветать» у посещённых */
+.category-card>a {
+	text-decoration: none;
+}
+
+.category-card>a:link,
+.category-card>a:visited {
+	color: var(--wine-plum);
+}
+
+.category-card>a:hover {
+	color: var(--vibrant-coral);
+}
+
+/* описание отделено от названия линией */
+.category-description {
+	margin: 0 0 .8rem;
+	padding-top: .8rem;
+	font-size: 1rem;
+	line-height: 1.5;
+	text-align: center;
+	border-top: 1px solid rgba(114, 61, 70, .5);
+}
+
+.category-actions {
+	display: flex;
+	justify-content: center;
+	gap: 1.5rem;
+	margin-top: auto;
+	padding-top: .6rem;
+	border-top: 1px dashed var(--wine-plum);
+}
+
+@media (max-width: 480px) {
+	.category-grid {
+		grid-template-columns: 1fr 1fr;
+		gap: 1rem;
+	}
+
+	.category-card h3 {
+		font-size: 1.3rem;
+	}
+}

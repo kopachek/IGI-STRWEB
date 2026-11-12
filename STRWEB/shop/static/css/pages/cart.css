@@ -1,0 +1,82 @@
+/* cart.css — корзина */
+
+#cart table {
+	width: 100%;
+	max-width: 62rem;
+	margin: 1.5rem 0 0;
+	background: rgba(255, 250, 240, .8);
+}
+
+#cart col:nth-child(1) {
+	width: 34%;
+}
+
+/* выравнивание: цены и суммы справа, количество по центру */
+#cart tbody td:nth-child(2),
+#cart tbody td:nth-child(4) {
+	text-align: right;
+	white-space: nowrap;
+}
+
+#cart tbody td:nth-child(3),
+#cart tbody td:nth-child(5) {
+	text-align: center;
+	white-space: nowrap;
+}
+
+/* кнопки − и + рядом с количеством */
+.qty-form {
+	display: inline;
+}
+
+.qty-form button {
+	padding: .1rem .7rem;
+	line-height: 1.3;
+}
+
+#cart data {
+	margin: 0 .6rem;
+	font-weight: 700;
+}
+
+/* кнопка удаления — «контурная» */
+#cart td:last-child button {
+	color: var(--wine-plum);
+	background: transparent;
+}
+
+#cart td:last-child button:hover {
+	color: var(--deep-mocha);
+	background: var(--vibrant-coral);
+}
+
+/* итог */
+#cart tfoot th {
+	text-align: right;
+	text-transform: uppercase;
+	letter-spacing: .08em;
+	background: var(--soft-peach);
+}
+
+#cart tfoot td {
+	font-size: 1.25rem;
+	background: var(--soft-peach);
+}
+
+.cart-pay {
+	max-width: 62rem;
+	margin-top: 1.5rem;
+	text-align: right;
+}
+
+.cart-pay button {
+	padding: .7rem 2.8rem;
+	font-size: 1.2rem;
+}
+
+@media (max-width: 700px) {
+	#cart table {
+		display: block;
+		overflow-x: auto;
+	}
+}

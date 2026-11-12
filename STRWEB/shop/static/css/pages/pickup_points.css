@@ -1,0 +1,68 @@
+/* pickup_points.css — пункты выдачи */
+
+#pickup-points {
+	display: grid;
+	grid-template-columns: repeat(auto-fill, minmax(320px, 1fr));
+	gap: 1.5rem;
+	margin-top: 1.5rem;
+}
+
+#pickup-points>article {
+	padding: 1rem 1.3rem;
+	background: rgba(255, 225, 168, .45);
+	border: 1px solid #ecd3a0;
+	border-top: 4px solid var(--vibrant-coral);
+	box-shadow: 0 4px 12px rgba(71, 45, 48, .1);
+	transition: transform .25s, box-shadow .25s;
+}
+
+#pickup-points>article:nth-child(even) {
+	background: rgba(201, 203, 163, .4);
+	border-color: var(--dry-sage);
+	border-top-color: var(--wine-plum);
+}
+
+#pickup-points>article:hover {
+	transform: translateY(-3px);
+	box-shadow: 0 10px 22px rgba(71, 45, 48, .2);
+}
+
+#pickup-points h3 {
+	margin: 0 0 .8rem;
+	padding-bottom: .6rem;
+	border-bottom: 1px dashed var(--wine-plum);
+}
+
+#pickup-points h3 a:link,
+#pickup-points h3 a:visited {
+	color: var(--wine-plum);
+}
+
+#pickup-points dl {
+	display: grid;
+	grid-template-columns: max-content 1fr;
+	gap: .5rem 1.2rem;
+	margin: 0;
+}
+
+#pickup-points dt,
+#pickup-points dd {
+	margin: 0;
+}
+
+#pickup-points dt {
+	font-weight: 700;
+	font-variant: small-caps;
+	letter-spacing: .04em;
+	color: var(--wine-plum);
+}
+
+#pickup-points address {
+	font-style: normal;
+}
+
+@media (max-width: 600px) {
+	#pickup-points {
+		grid-template-columns: 1fr;
+	}
+}

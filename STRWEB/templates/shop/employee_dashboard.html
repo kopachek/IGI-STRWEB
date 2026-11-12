@@ -1,19 +1,24 @@
 {% extends 'base.html' %}
+{% load static %}
 {% block title %}Employee dashboard{% endblock %}
 
-{% block meta_description %}<meta name="description" content="Employee dashboard: assigned clients, orders and sales.">{% endblock %}
-{% block meta_keywords %}<meta name="keywords" content="employee, clients, orders, sales, dashboard">{% endblock %}
+{% block meta_description %}
+<meta name="description" content="Employee dashboard: assigned clients, orders and sales.">{% endblock %}
+{% block meta_keywords %}
+<meta name="keywords" content="employee, clients, orders, sales, dashboard">{% endblock %}
+
+{% block extra_css %}<link rel="stylesheet" href="{% static 'css/pages/employee_dashboard.css' %}">{% endblock %}
 
 {% block content %}
 <h2 itemscope itemtype="https://schema.org/Person">Employee: <span itemprop="name">{{ employee }}</span></h2>
 
 <section id="clients">
 	<h3>Your clients</h3>
-	<ul>
+	<ul class="client-list">
 		{% for c in clients %}
 		<li id="client-{{ c.pk }}" itemscope itemtype="https://schema.org/Person">
-			<span itemprop="name">{{ c }}</span> —
-			<a itemprop="telephone" href="tel:{{ c.phone|cut:' '|cut:'-'|cut:'('|cut:')' }}">{{ c.phone }}</a> —
+			<strong class="client-name" itemprop="name">{{ c }}</strong>
+			<a itemprop="telephone" href="tel:{{ c.phone|cut:' '|cut:'-'|cut:'('|cut:')' }}">{{ c.phone }}</a>
 			<a itemprop="email" href="mailto:{{ c.email }}">{{ c.email }}</a>
 		</li>
 		{% empty %}<li>No assigned clients</li>{% endfor %}
@@ -41,11 +46,12 @@
 		</thead>
 		<tbody>
 			{% for o in orders %}{% if o.items_total == 0 %}{% else %}
-			<tr id="order-{{ o.pk }}" itemscope itemtype="https://schema.org/Order" itemid="{% url 'employee_dashboard' %}#order-{{ o.pk }}">
+			<tr id="order-{{ o.pk }}" itemscope itemtype="https://schema.org/Order"
+				itemid="{% url 'employee_dashboard' %}#order-{{ o.pk }}">
 				<td headers="h-order">#<span itemprop="orderNumber">{{ o.pk }}</span></td>
 				<td headers="h-client" itemprop="customer">{{ o.client }}</td>
 				<td headers="h-date"><time itemprop="orderDate" datetime="{{ o.sale_date|date:'Y-m-d' }}">{{ o.sale_date|date:"d/m/Y" }}</time></td>
-				<td headers="h-total"><strong><data value="{{ o.items_total }}">{{ o.items_total }}</data></strong></td>
+				<td headers="h-total"><strong><data value="{{ o.items_total|floatformat:'2u' }}">{{ o.items_total|floatformat:2 }}</data></strong></td>
 			</tr>
 			{% endif %}{% endfor %}
 		</tbody>

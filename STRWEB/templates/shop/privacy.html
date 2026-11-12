@@ -1,8 +1,15 @@
 {% extends 'base.html' %}
+{% load static %}
 {% block title %}Privacy{% endblock %}
 
-{% block meta_description %}<meta name="description" content="Privacy policy of our confectionery shop: what personal data we collect, why, and how you can control it.">{% endblock %}
-{% block meta_keywords %}<meta name="keywords" content="privacy policy, personal data, cookies, confectionery">{% endblock %}
+{% block meta_description %}
+<meta name="description"
+	content="Privacy policy of our confectionery shop: what personal data we collect, why, and how you can control it.">
+{% endblock %}
+{% block meta_keywords %}
+<meta name="keywords" content="privacy policy, personal data, cookies, confectionery">{% endblock %}
+
+{% block extra_css %}<link rel="stylesheet" href="{% static 'css/pages/privacy.css' %}">{% endblock %}
 
 {% block content %}
 <article id="privacy-policy" itemscope itemtype="https://schema.org/WebPage" itemid="{% url 'privacy' %}">
@@ -11,7 +18,8 @@
 		<p>Last updated: <time itemprop="dateModified" datetime="2026-10-26">26 October 2026</time></p>
 		<p>Personal data of users is collected to form statistics and is not shared with any 3rd parties.</p>
 		<blockquote>
-			<p><mark>We collect only the data that is needed to process your orders and to keep the site running.</mark></p>
+			<p><mark>We collect only the data that is needed to process your orders and to keep the site running.</mark>
+			</p>
 			<footer>&mdash; <cite translate="no">Confectionery Shop</cite></footer>
 		</blockquote>
 	</header>
@@ -29,10 +37,11 @@
 	<hr>
 
 	<section id="terms">
-		<h3>1. Terms</h3>
+		<h3>Terms</h3>
 		<dl>
 			<dt><dfn>Personal data</dfn></dt>
-			<dd>Any information that relates to an identified or identifiable person, such as a name, phone number or e-mail address.</dd>
+			<dd>Any information that relates to an identified or identifiable person, such as a name, phone number or
+				e-mail address.</dd>
 			<dt><dfn>Account</dfn></dt>
 			<dd>Your registered profile on this site, used to place orders and to leave reviews.</dd>
 			<dt><dfn>Order</dfn></dt>
@@ -42,7 +51,7 @@
 	<hr>
 
 	<section id="data">
-		<h3>2. Data we collect</h3>
+		<h3>Data we collect</h3>
 		<table>
 			<caption>Categories of personal data and the purposes of their use</caption>
 			<colgroup>
@@ -60,12 +69,14 @@
 			<tbody>
 				<tr>
 					<th id="r-account" scope="row">Account</th>
-					<td headers="r-account h-examples">Username, first and last name, password (stored in hashed form)</td>
+					<td headers="r-account h-examples">Username, first and last name, password (stored in hashed form)
+					</td>
 					<td headers="r-account h-purpose">Sign-in and identification</td>
 				</tr>
 				<tr>
 					<th id="r-contact" scope="row">Contact details</th>
-					<td headers="r-contact h-examples">Phone number, e-mail address, delivery address, date of birth</td>
+					<td headers="r-contact h-examples">Phone number, e-mail address, delivery address, date of birth
+					</td>
 					<td headers="r-contact h-purpose">Order processing, delivery, age check</td>
 				</tr>
 				<tr>
@@ -89,7 +100,7 @@
 	<hr>
 
 	<section id="cookies">
-		<h3>3. Cookies</h3>
+		<h3>Cookies</h3>
 		<p>The site uses only technical cookies that are required for it to work:</p>
 		<dl>
 			<dt><code>sessionid</code></dt>
@@ -99,13 +110,14 @@
 		</dl>
 		<details>
 			<summary>Can I disable cookies?</summary>
-			<p>Yes, in your browser settings. Please note that without these cookies you will not be able to sign in or use the cart.</p>
+			<p>Yes, in your browser settings. Please note that without these cookies you will not be able to sign in or
+				use the cart.</p>
 		</details>
 	</section>
 	<hr>
 
 	<section id="rights">
-		<h3>4. Your rights</h3>
+		<h3>Your rights</h3>
 		<p>You may at any time:</p>
 		<ol>
 			<li>ask which of your personal data we store;</li>
@@ -117,12 +129,13 @@
 	<hr>
 
 	<section id="contact">
-		<h3>5. Contact us</h3>
-		<p>To exercise your rights, use the details on the <a href="{% url 'contacts' %}" hreflang="en" type="text/html" title="Contacts page">Contacts</a> page and use the subject <q>Personal data request</q>.</p>
+		<h3>Contact us</h3>
+		<p>To exercise your rights, use the details on the <a href="{% url 'contacts' %}" hreflang="en" type="text/html"
+				title="Contacts page">Contacts</a> page and use the subject <q>Personal data request</q>.</p>
 	</section>
 
-	<footer>
-		<p><a href="#privacy-policy" accesskey="t" title="Back to the top of the policy">Back to top</a></p>
+	<footer class="policy-footer">
+		<p><a class="btn" href="#privacy-policy" accesskey="t" title="Back to the top of the policy">Back to top</a></p>
 	</footer>
 </article>
 {% endblock %}

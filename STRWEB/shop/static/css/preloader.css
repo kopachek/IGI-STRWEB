@@ -1,0 +1,69 @@
+/* preloader.css — «бесконечность» внизу страницы (чистая CSS-анимация).
+   Обычный блок в потоке страницы: не fixed, не перекрывает контент. */
+
+.infinity-loader {
+	--T: 2.4s;      /* время полного круга */
+	--r: 1.31;      /* радиус скругления в единицах pathLength: (stroke-width / 2) / длина пути * 100 = 3.5 / 266.2 * 100 */
+	position: static;
+	display: flex;
+	justify-content: center;
+	margin: 3.5rem 0 1rem;
+	background: none;
+}
+
+.infinity-loader svg {
+	width: 180px;
+	height: auto;
+	overflow: visible;
+}
+
+.infinity-loader path {
+	fill: none;
+	stroke-width: 7;
+}
+
+/* неподвижная «дорожка» фигуры */
+.infinity-loader .track {
+	stroke: var(--line);
+	stroke-linecap: round;
+	opacity: .7;
+}
+
+/* бегущая линия: 4 цвета, каждый занимает ровно 10% длины фигуры */
+.infinity-loader .run {
+	stroke-linecap: butt;
+	stroke-dasharray: 10.4 89.6; /* 10 + 0.4 перекрытия, чтобы не было швов */
+	animation: infinity-run var(--T) linear infinite;
+	/* --n: 0 — голова, 3 — хвост; каждый следующий отстаёт на 10% круга */
+	animation-delay: calc(var(--T) * -1 + var(--n) * var(--T) * .1);
+}
+
+.infinity-loader .run.c0 { --n: 0; stroke: var(--wine-plum); }
+.infinity-loader .run.c1 { --n: 1; stroke: var(--vibrant-coral); }
+.infinity-loader .run.c2 { --n: 2; stroke: var(--soft-peach); }
+.infinity-loader .run.c3 { --n: 3; stroke: var(--dry-sage); }
+
+/* скруглённые концы только у головы (c0) и хвоста (c3).
+   Круглый кап добавляет r к длине, поэтому сам отрезок укорачивается на r —
+   видимая длина остаётся 10%. */
+.infinity-loader .run.c0 {
+	stroke-linecap: round;
+	stroke-dasharray: calc(10 - var(--r)) calc(90 + var(--r));
+}
+
+.infinity-loader .run.c3 {
+	stroke-linecap: round;
+	stroke-dasharray: calc(10 - var(--r) + .4) calc(90 + var(--r) - .4);
+	animation-delay: calc(var(--T) * -1 + var(--n) * var(--T) * .1 - var(--r) * var(--T) / 100);
+}
+
+@keyframes infinity-run {
+	from { stroke-dashoffset: 0; }
+	to   { stroke-dashoffset: -100; }
+}
+
+@media (prefers-reduced-motion: reduce) {
+	.infinity-loader {
+		--T: 6s;
+	}
+}

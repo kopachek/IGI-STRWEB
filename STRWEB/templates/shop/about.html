@@ -3,48 +3,57 @@
 
 {% block title %}About Us - Confectionery Shop{% endblock %}
 
-{% block meta_description %}<meta name="description" content="Learn more about our confectionery shop, our history, company information, and certificates.">{% endblock %}
-{% block meta_keywords %}<meta name="keywords" content="about us, company history, confectionery certificates, company info">{% endblock %}
+{% block meta_description %}
+<meta name="description" content="Learn more about our confectionery shop, our history, company information, and certificates.">{% endblock %}
+{% block meta_keywords %}
+<meta name="keywords" content="about us, company history, confectionery certificates, company info">{% endblock %}
+
+{% block extra_css %}<link rel="stylesheet" href="{% static 'css/pages/about.css' %}">{% endblock %}
 
 {% block content %}
 <h2>About company</h2>
 
 {% if info %}
-	{% if info.logo %}
-	<p>
-		<img id="company-logo" itemprop="logo" src="{{ info.logo.url }}" alt="{{ info.title|default:'Company Logo' }}" height="100">
-	</p>
-	{% endif %}
-	<article>{{ info.content|linebreaks }}</article>
+{% if info.logo %}
+<p class="logo-wrap">
+	<img id="company-logo" itemprop="logo" src="{{ info.logo.url }}" alt="{{ info.title|default:'Company Logo' }}" height="100">
+</p>
+{% endif %}
+<article class="about-text">{{ info.content|linebreaks }}</article>
 {% else %}
-	<p>Information will appear soon.</p>
+<p>Information will appear soon.</p>
 {% endif %}
 
-<section id="video" style="margin-top: 30px;">
+<section id="video">
 	<h3>Company Video Presentation</h3>
 	<p>Watch a short video about how we create our sweets:</p>
-	<figure style="margin:0">
-		<iframe src="https://archive.org/embed/adam-ragusea-jiggly-cake-homemade-giant-castella" width="640" height="360" frameborder="0" webkitallowfullscreen="true" mozallowfullscreen="true" allowfullscreen></iframe>
-		<figcaption>Presentation</figcaption>
-	</figure>
-	<video width="560" height="315" controls>
-		<source src="{% static 'vid/presentation.mp4' %}" type="video/mp4">
-		<span lang="ru">Your browser doesn't support video.</span>
-	</video>
+	<div class="media">
+		<figure>
+			<iframe src="https://archive.org/embed/adam-ragusea-jiggly-cake-homemade-giant-castella" width="640" height="360" frameborder="0" webkitallowfullscreen="true" mozallowfullscreen="true" allowfullscreen></iframe>
+			<figcaption>Presentation</figcaption>
+		</figure>
+		<figure>
+			<video width="560" height="315" controls>
+				<source src="{% static 'vid/presentation.mp4' %}" type="video/mp4">
+				<span lang="ru">Your browser doesn't support video.</span>
+			</video>
+			<figcaption>Company video</figcaption>
+		</figure>
+	</div>
 </section>
 
 {% if history %}
-<section id="history" style="margin-top: 30px;">
+<section id="history">
 	<h3>History</h3>
-	<ol>
+	<ol class="history">
 		{% for h in history %}
-		<li><strong><time datetime="{{ h.year }}">{{ h.year }}</time></strong>: {{ h.description }}</li>
+		<li><strong class="year"><time datetime="{{ h.year }}">{{ h.year }}</time></strong> <span>{{ h.description }}</span></li>
 		{% endfor %}
 	</ol>
 </section>
 {% endif %}
 
-<section id="requisites" style="margin-top: 30px;" itemscope itemtype="https://schema.org/Organization" itemid="{% url 'about' %}#company" itemref="company-logo">
+<section id="requisites" itemscope itemtype="https://schema.org/Organization" itemid="{% url 'about' %}#company" itemref="company-logo">
 	<h3>Company Requisites</h3>
 	<address>
 		<dl>
@@ -62,9 +71,27 @@
 
 <section id="certificate">
 	<h3>Certificate</h3>
-	<figure style="margin:0">
-		<img src="{% static 'img/certificate.jpeg' %}" alt="Certificate" style="max-width: 400px; width: 100%; height: auto; border: 1px solid #ccc;">
-		<figcaption>Certificate of inclusion in the Unified Register of Confectionery Manufacturers</figcaption>
-	</figure>
+	<article class="certificate">
+		<header>
+			<p class="cert-register">Unified Register of Confectionery Manufacturers</p>
+			<h4>Certificate</h4>
+			<p class="cert-subtitle">of inclusion in the register</p>
+		</header>
+		<p class="cert-intro">This is to certify that</p>
+		<p class="cert-holder">Confectionery Shop <abbr title="Limited Liability Company">LLC</abbr></p>
+		<p class="cert-address">Independence Avenue 15, Minsk, Belarus</p>
+		<p class="cert-number">Registry number: <strong>8241</strong></p>
+		<footer>
+			<p class="cert-date">
+				<time datetime="2025-01-17">17 January 2025</time>
+				<small>Date of issue</small>
+			</p>
+			<p class="cert-sign">
+				<span class="signature">T. Svirko</span>
+				<small>Head of the Register</small>
+			</p>
+		</footer>
+		<p class="cert-seal" aria-hidden="true">Confectionery Shop<br>&#10022;<br>Minsk</p>
+	</article>
 </section>
 {% endblock %}
